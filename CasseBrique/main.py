@@ -12,6 +12,7 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("CasseBrique")
 
 brique = BC.Brique(50,50 ,25,75 , (255, 255, 255))
+map = [brique.rect]
 
 
 objet_player = pygame.Rect(width//2, height -15, 50, 10)
@@ -31,7 +32,6 @@ while True:
     for i in map:
         if balle.colliderect(i):
             velocity[1] = -velocity[1]
-            map.remove(i)
 
     if balle.right > width or balle.left < 0:
         velocity[0] = -velocity[0]
