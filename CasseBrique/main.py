@@ -1,7 +1,11 @@
 import pygame
 import CasseBrique.BriqueClass as BC
 import CasseBrique.PlayerClass as PC
+
+
 pygame.init()
+
+
 width, height = 600, 600
 
 screen = pygame.display.set_mode((width, height))
