@@ -19,21 +19,23 @@ def get_angle(x1, y1, x2, y2):
 
 objet_player = pygame.Rect(width//2, height -15, 100, 10)
 player = PC.Player(objet_player, (255, 255, 255))
-balle = balle = pygame.Rect(width//2-10,50,10,10)
+balle = pygame.Rect(width//2-10,200,10,10)
 velocity = [2, 3]
 
 Map = [
-    [1, 1, 1],
-    [1, 1, 1],
-    [0, 1, 0]
+    [1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1],
+    [0, 1, 1, 1, 0]
 ]
 
 map = []
 for (i, line) in enumerate(Map):
     for (j, cell) in enumerate(line):
-        x,y = j*(75+5), i*(25+5)
-        brique = BC.Brique(x+10, y+10, 25, 75, white, screen, cell)
-        map.append(brique)
+        x,y = j*width//len(line)-len(line)-5, i*(25+5)
+        brique = BC.Brique(x+10, y+10, width//len(line)-len(line), 25, screen, cell)
+        if brique.type == 1:
+            map.append(brique)
 
 while True:
     mouse = (pygame.mouse.get_pos())
@@ -46,6 +48,7 @@ while True:
 
     for i in map:
         if balle.colliderect(i.rect):
+            velocity[1] = -velocity[1]
             map.remove(i)
 
 
@@ -55,12 +58,27 @@ while True:
     if balle.top < 0:
         velocity[1] = -velocity[1]
 
+    if balle.bottom > height:
+        exit()
+    print(velocity)
     if balle.colliderect(objet_player):
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        angle = get_angle(mouse_x, mouse_y,balle.x, balle.y)
-        print(math.sin(angle))
-        velocity[1] = -velocity[1] * math.sin(angle)
-        velocity[0] *= math.cos(angle)
+        if  objet_player.centerx + 20 < balle.x:
+            if velocity[0] < 0:
+                print("oui")
+                velocity[1] = -velocity[1]
+                velocity[0] = - velocity[0]
+            else:
+                velocity[1] = -velocity[1]
+
+        elif objet_player.centerx - 20 > balle.x:
+            if velocity[0] > 0:
+                velocity[1] = -velocity[1]
+                velocity[0] = -velocity[0]
+            else:
+                velocity[1] = -velocity[1]
+        else:
+            velocity[1] = -velocity[1]
+
 
     balle.x += velocity[0]
     balle.y += velocity[1]
