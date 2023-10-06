@@ -21,3 +21,6 @@ class Brique:
 
     def draw(self):
         pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
+
+    def __repr__(self):
+        return str((self.x, self.y))

@@ -7,7 +7,7 @@ class Player:
         self.rect = rect
 
     def aller(self, mouse):
-        if self.rect.x != mouse[0]:
+        if self.rect.x != mouse[0] and (self.rect.right <= 600 or self.rect.left >= 0):
             difference = mouse[0] - self.rect.x
             self.rect.x += min(difference//10, 10)
 

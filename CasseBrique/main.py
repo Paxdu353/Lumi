@@ -46,10 +46,10 @@ while True:
 
     player.aller(mouse)
 
-    for i in map:
-        if balle.colliderect(i.rect):
+    for (i, rect) in enumerate(map):
+        if balle.colliderect(rect.rect):
             velocity[1] = -velocity[1]
-            map.remove(i)
+            map.pop(i)
 
 
     if balle.right > width or balle.left < 0:
@@ -60,7 +60,8 @@ while True:
 
     if balle.bottom > height:
         exit()
-    print(velocity)
+
+
     if balle.colliderect(objet_player):
         if  objet_player.centerx + 20 < balle.x:
             if velocity[0] < 0:
