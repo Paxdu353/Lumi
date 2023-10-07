@@ -13,14 +13,11 @@ class Brique:
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         self.type = type
         self.screen = screen
-        self.rect = pygame.Rect(self.width,self.height, self.x, self.y,)
-
-
-
-
-
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+    def PU(self):
+        pass
     def draw(self):
-        pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
+        pygame.draw.rect(self.screen, self.color, self.rect)
 
     def __repr__(self):
         return str((self.x, self.y))

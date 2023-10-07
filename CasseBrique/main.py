@@ -23,17 +23,18 @@ balle = pygame.Rect(width//2-10,200,10,10)
 velocity = [2, 3]
 
 Map = [
-    [1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1],
-    [0, 1, 1, 1, 0]
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [0, 1, 1, 1, 1, 0],
+    [0, 0, 1, 1, 0, 0]
 ]
 
 map = []
 for (i, line) in enumerate(Map):
     for (j, cell) in enumerate(line):
-        x,y = j*width//len(line)-len(line)-5, i*(25+5)
-        brique = BC.Brique(x+10, y+10, width//len(line)-len(line), 25, screen, cell)
+        x, y = j * (width // len(line)), i * 30
+        brique = BC.Brique(x, y, width // len(line) - 5, 25, screen, cell)
         if brique.type == 1:
             map.append(brique)
 
@@ -61,24 +62,12 @@ while True:
     if balle.bottom > height:
         exit()
 
-
     if balle.colliderect(objet_player):
-        if  objet_player.centerx + 20 < balle.x:
-            if velocity[0] < 0:
-                print("oui")
-                velocity[1] = -velocity[1]
-                velocity[0] = - velocity[0]
-            else:
-                velocity[1] = -velocity[1]
-
-        elif objet_player.centerx - 20 > balle.x:
-            if velocity[0] > 0:
-                velocity[1] = -velocity[1]
-                velocity[0] = -velocity[0]
-            else:
-                velocity[1] = -velocity[1]
-        else:
-            velocity[1] = -velocity[1]
+        velocity[1] = -velocity[1]
+        if balle.centerx < objet_player.centerx - 20:
+            velocity[0] = -abs(velocity[0])
+        elif balle.centerx > objet_player.centerx + 20:
+            velocity[0] = abs(velocity[0])
 
 
     balle.x += velocity[0]
