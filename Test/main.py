@@ -1,9 +1,11 @@
 import pygame
+import PlayerClass as PC
 from Constants import *
 pygame.init()
 
 screen = pygame.display.set_mode(win_size)
 pygame.display.set_caption("Racasting")
+player = PC.Player(250, 250)
 
 
 
@@ -11,9 +13,9 @@ pygame.display.set_caption("Racasting")
 Map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 1, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -36,12 +38,17 @@ while True:
             pygame.quit()
             exit()
 
+    player.moove()
+
+
 
 
     screen.fill(black)
 
     for i in map:
         pygame.draw.rect(screen, white, i)
-    pygame.display.flip()
 
+    player.draw(screen)
+    player.vision(screen)
+    pygame.display.flip()
     pygame.time.wait(10)
