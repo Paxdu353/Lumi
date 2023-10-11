@@ -4,7 +4,6 @@ class Pile:
     def __init__(self, taille):
         self.__taille = taille
         self.__L = [0] + [None] * taille
-        self.clear = self.__L
 
     def sommet(self):
         return self.__L[self.__L[0]]
@@ -14,13 +13,17 @@ class Pile:
         if self.__L[0] != self.__taille:
             self.__L[0] += 1
             self.__L[self.__L[0]] = number
+        else:
+            print("Pile pleine")
 
     def depiler(self):
         if self.__L[1] != None:
             depile = self.sommet()
+            self.__L[self.__L[0]] = None
             self.__L[0] -= 1
-            self.__L.remove(self.sommet())
             return depile
+        else:
+            print("pile vide")
 
     def vider(self):
         T = time.time()
