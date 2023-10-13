@@ -1,11 +1,11 @@
 import pygame
 import PlayerClass as PC
 from Constants import *
+
 pygame.init()
 
-screen = pygame.display.set_mode(win_size)
+screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Racasting")
-player = PC.Player(250, 250)
 
 
 
@@ -25,6 +25,10 @@ Map = [
 
 map = []
 
+player = PC.Player(250, 250, screen, map)
+
+
+
 for (i, line) in enumerate(Map):
     for (j, line) in enumerate(line):
         if line == 1:
@@ -39,7 +43,6 @@ while True:
             exit()
 
     player.moove()
-
 
 
 

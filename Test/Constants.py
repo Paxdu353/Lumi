@@ -1,5 +1,5 @@
 # Display
-win_size = width, height = (1000, 800)
+win_size = width, height = (1200, 800)
 
 #Color
 black = (0, 0, 0)

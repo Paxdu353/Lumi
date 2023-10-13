@@ -23,6 +23,7 @@ def parenthesage(calc: str):
 
 
 def calcul_npi(liste : list):
+    pass
 
 
 
