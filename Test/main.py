@@ -46,10 +46,13 @@ while True:
 
 
 
-    screen.fill(black)
+    screen.fill(BLACK)
 
     for i in map:
-        pygame.draw.rect(screen, white, i)
+        pygame.draw.rect(screen, WHITE, i)
+
+
+
 
     player.draw(screen)
     player.vision(screen)
