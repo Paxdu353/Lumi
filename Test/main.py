@@ -4,7 +4,7 @@ from Constants import *
 
 pygame.init()
 
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((800, 600), pygame.RESIZABLE, pygame.FULLSCREEN)
 pygame.display.set_caption("Racasting")
 
 
@@ -27,7 +27,7 @@ map = []
 
 player = PC.Player(250, 250, screen, map)
 
-
+clock = pygame.time.Clock()
 
 for (i, line) in enumerate(Map):
     for (j, line) in enumerate(line):
@@ -55,6 +55,14 @@ while True:
 
 
     player.draw(screen)
-    player.vision(screen)
+    player.draw_rays(screen)
     pygame.display.flip()
+    pygame.time.wait(10)
+
+    clock.tick(60)  # Assure que le programme ne tourne pas à plus de 60 FPS
+
+    # Obtenir le FPS actuel et le mettre à jour dans le titre
+    fps = clock.get_fps()
+    pygame.display.set_caption(f"Racasting - FPS: {fps:.2f}")
+
     pygame.time.wait(10)
