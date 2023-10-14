@@ -1,5 +1,5 @@
 # Display
-win_size = width, height = (1200, 800)
+win_size = width, height = (1920, 1080)
 
 #Color
 BLACK = (0, 0, 0)
@@ -10,8 +10,8 @@ WHITE = (255, 255, 255)
 
 #Player
 
-FOV = 60
-RAYS_DRAW = 20
+FOV = 180
+RAYS_DRAW = 60
 RAYS_ANGLE = FOV/RAYS_DRAW
-RAYS_MAX_DIST = 250
+RAYS_MAX_DIST = 1000
 RAYS_DIST_ENTRE = width / RAYS_DRAW

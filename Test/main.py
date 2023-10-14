@@ -13,7 +13,7 @@ pygame.display.set_caption("Racasting")
 Map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -51,18 +51,18 @@ while True:
     for i in map:
         pygame.draw.rect(screen, WHITE, i)
 
-
-
-
     player.draw(screen)
-    player.draw_rays(screen)
+
+
+
+
+
+    player.vision(screen)
     pygame.display.flip()
     pygame.time.wait(10)
 
-    clock.tick(60)  # Assure que le programme ne tourne pas à plus de 60 FPS
+    clock.tick(60)
 
-    # Obtenir le FPS actuel et le mettre à jour dans le titre
     fps = clock.get_fps()
     pygame.display.set_caption(f"Racasting - FPS: {fps:.2f}")
 
-    pygame.time.wait(10)
