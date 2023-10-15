@@ -15,6 +15,9 @@ class Player:
     def get_pos(self):
         return self.x // 50, self.y // 50
 
+    def get_angle(self, x, y):
+        return math.atan2(y-self.y, x-self.x)
+
     def check_collision(self, x_move, y_move):
         new_rect = self.rect.move(x_move, y_move)
         for brick in self.map:
@@ -25,8 +28,11 @@ class Player:
 
     def vision(self, screen):
         mouse_x = pygame.mouse.get_pos()[0] / 140
-        xe, ye = self.x + math.cos(mouse_x) * 150, self.y + math.sin(mouse_x) * 150
-        line = pygame.draw.line(screen, RED, (self.x, self.y), (xe, ye), 2)
+
+        for i in range(RAYS_DRAW):
+            xe = self.x + math.cos(mouse_x ) * RAYS_MAX_DIST
+            ye = self.y + math.sin(mouse_x ) * RAYS_MAX_DIST
+            line = pygame.draw.line(screen, RED, (self.x, self.y), (xe, ye), 2)
 
     def moove(self):
         if pygame.key.get_pressed()[pygame.K_z]:
