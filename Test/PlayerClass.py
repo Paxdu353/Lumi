@@ -15,9 +15,6 @@ class Player:
     def get_pos(self):
         return self.x // 50, self.y // 50
 
-    def get_angle(self, x, y):
-        return math.atan2(y-self.y, x-self.x)
-
     def check_collision(self, x_move, y_move):
         new_rect = self.rect.move(x_move, y_move)
         for brick in self.map:
@@ -26,33 +23,48 @@ class Player:
 
         return False
 
-    def vision(self, screen):
-        mouse_x = pygame.mouse.get_pos()[0] / 140
-
-        for i in range(RAYS_DRAW):
-            xe = self.x + math.cos(mouse_x ) * RAYS_MAX_DIST
-            ye = self.y + math.sin(mouse_x ) * RAYS_MAX_DIST
-            line = pygame.draw.line(screen, RED, (self.x, self.y), (xe, ye), 2)
-
     def moove(self):
+        x_move, y_move = 0, 0
+        mouse_x = pygame.mouse.get_pos()[0] / 140
+        direction_x = math.cos(mouse_x)
+        direction_y = math.sin(mouse_x)
+
         if pygame.key.get_pressed()[pygame.K_z]:
-            if not self.check_collision(0, -1):
-                self.y -= 1
+            x_move = direction_x
+            y_move = direction_y
+            if not self.check_collision(x_move, y_move):
+                self.x += x_move
+                self.y += y_move
+            x_move, y_move = 0, 0
+
         if pygame.key.get_pressed()[pygame.K_s]:
-            if not self.check_collision(0, 1):
-                self.y += 1
-        if pygame.key.get_pressed()[pygame.K_d]:
-            if not self.check_collision(1, 0):
-                self.x += 1
-        if pygame.key.get_pressed()[pygame.K_q]:
-            if not self.check_collision(-1, 0):
-                self.x -= 1
+            x_move = -direction_x
+            y_move = -direction_y
+            if not self.check_collision(x_move, y_move):
+                self.x += x_move
+                self.y += y_move
+            x_move, y_move = 0, 0
+
+        if pygame.key.get_pressed()[pygame.K_d] and not self.check_collision(1, 0):
+            self.x += 1
+
+        if pygame.key.get_pressed()[pygame.K_q] and not self.check_collision(-1, 0):
+            self.x -= 1
+
+        self.x += x_move
+        self.y += y_move
 
         self.rect.x, self.rect.y = (self.x-5, self.y-5)
 
+        #print(pygame.mouse.get_rel())
+
+    def vision(self, screen):
+        mouse_x = pygame.mouse.get_pos()[0]/140
+        xe, ye = self.x + math.cos(mouse_x)*150, self.y + math.sin(mouse_x)*150
+        line = pygame.draw.line(screen, RED, (self.x, self.y), (xe, ye), 2)
 
 
     def draw(self, screen):
-        #pygame.draw.rect(self.screen, WHITE, self.rect)
+        pygame.draw.rect(self.screen, WHITE, self.rect)
         pygame.draw.circle(self.screen, WHITE, (self.x, self.y), 5)
 
