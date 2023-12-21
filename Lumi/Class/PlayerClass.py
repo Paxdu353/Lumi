@@ -1,10 +1,9 @@
 import pygame
-import Class.ProjectileClass as PCP
 import math
 
 class Player():
 
-    def __init__(self, x_pos, y_pos,main_attack = 10, ultime_attack = 4, width = 32, height = 32, ):
+    def __init__(self, x_pos, y_pos, main_attack = 10, ultime_attack = 4 , width = 32 , height = 32):
         self.x = x_pos
         self.y = y_pos
         self.width = width
@@ -48,6 +47,12 @@ class Player():
                 self.__is_jumping = False
                 self.__velocity_y = 0
                 self.__jumps_left = 2
+
+    def draw_ammo(self, screen):
+        ammo_text = f"Bullet: {self.main_attack}, Ultimate: {self.ultime_attack}"
+        font = pygame.font.SysFont(None, 24)
+        text = font.render(ammo_text, True, (255, 255, 255))
+        screen.blit(text, (10, 10))
 
 
 
