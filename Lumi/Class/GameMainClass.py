@@ -4,20 +4,36 @@ import Lumi.Class.ProjectileClass as PCP
 import Lumi.Class.ItemClass as IC
 
 pygame.init()
+
+
 class Main:
 
     def __init__(self, width=1920, height=1080, name="Lumi", fps=60):
+
+        self.clock = pygame.time.Clock()
         self.width = width
         self.height = height
         self.__name = name
         self.fps = fps
         self.__screen = pygame.display.set_mode((self.width, self.height))
-        self.__player = PC.Player(self.width/2, height - 50)
+        self.__player = PC.Player(self.width/2, height - 118)
         self.projectiles = []
         self.ulti = []
-        self.items = [IC.Item(250, 750, 'main'), IC.Item(600, 750, 'ultimate')]
-        self.background = [pygame.image.load(f'Lumi/Lumi/Class/images/{img}.png').convert_alpha() for img in range(1, 7)]
+        self.items = []
+        self.background = [pygame.image.load(f'Class/images/{img}.png').convert_alpha() for img in range(1, 8)]
+        self.width_background = self.background[0].get_width()
+        self.scroll = 0
         pygame.display.set_caption(self.__name)
+
+
+    def draw_bg(self):
+        for x in range(5):
+            speed = 1
+            for i in self.background:
+                self.__screen.blit(i, ((x*self.width_background) - self.__player.scroll * speed, 0))
+                speed += 0.2
+
+
 
     def main_events(self):
         for event in pygame.event.get():
@@ -39,6 +55,8 @@ class Main:
                         for i in range(3):
                             self.ulti.append(PCP.Projectile(self.__player.x, self.__player.y, angle, 7-i))
 
+
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if len(self.projectiles) == 0 and len(self.ulti) == 0 and self.__player.main_attack > 0:
@@ -48,20 +66,23 @@ class Main:
                         self.projectiles.append(PCP.Projectile(self.__player.x, self.__player.y, angle))
                         self.__player.main_attack -= 1
 
-        for item in self.items:
-            if item.check_collision(self.__player) and not item.collected:
-                item.collect(self.__player)
+        if len(self.items) != 0:
+            for item in self.items:
+                if item.check_collision(self.__player) and not item.collected:
+                    item.collect(self.__player)
 
         cle = pygame.key.get_pressed()
-        self.__player.move(cle, self.width)
+        self.__player.move(cle, self.width, 3000)
 
 
 
 
 
     def update_display(self):
-        self.__screen.fill((0, 0, 0))
+
         self.__player.update()
+        self.draw_bg()
+
 
 
         for projectile in self.projectiles + self.ulti:
@@ -79,6 +100,7 @@ class Main:
 
 
     def draw(self):
+
         self.__player.draw(self.__screen)
         self.__player.draw_ammo(self.__screen)
         pygame.display.flip()
@@ -88,4 +110,6 @@ class Main:
             self.main_events()
             self.update_display()
             self.draw()
-            pygame.time.Clock().tick(self.fps)
+            self.clock.tick(self.fps)
+
+
