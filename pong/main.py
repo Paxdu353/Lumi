@@ -4,7 +4,7 @@ import random
 
 pygame.init()
 
-width, height = 1920, 1080
+width, height = 600, 600
 black = (0, 0, 0)
 white= (255, 255, 255)
 red = (255, 0, 0)
@@ -17,7 +17,7 @@ balle = pygame.Rect(width//2-10,50,10,10)
 r1 = RaquetteClass.Raquette(pygame.Rect(10,100,5,50), white, True)
 r2 = RaquetteClass.Raquette(pygame.Rect(310, 100, 5, 50), white, False)
 
-screen = pygame.display.set_mode((1920, 1080))
+screen = pygame.display.set_mode((320, 300))
 pygame.display.set_caption("Pong")
 font = pygame.font.SysFont("None", 16)
 
