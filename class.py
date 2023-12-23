@@ -1,72 +1,59 @@
-from math import gcd
-import math
-class Fraction:
-    def __init__(self, a, b):
-        self.numerateur = a // gcd(a, b)
-        self.denominateur = b // gcd(a, b)
-        self.compacte = self.numerateur/self.denominateur
+import pygame
 
-        if b == 0:
-            raise ZeroDivisionError("Pas de 0 au dénominateur !")
+import sys
 
+pygame.init()
 
-    def isdecimal(self):
-        D = self.denominateur
-        while D % 2 == 0:
-            D //= 2
+CLOCK = pygame.time.Clock()
 
-        while D % 5 == 0:
-            D //= 5
+ecran = pygame.display.set_mode((800, 800))
 
-        return D == 1
+pygame.display.set_caption("Jumping in PyGame")
 
+X_POSITION, Y_POSITION = 400, 660
 
+jumping = False
 
-    def __repr__(self):
-        return f'{self.numerateur}/{self.denominateur}'
+Y_GRAVITY = 1
 
-    def __add__(self, nbr):
-        if isinstance(nbr, int):
-            NouvelleFraction = Fraction(self.numerateur + (self.denominateur * nbr), self.denominateur)
-            return NouvelleFraction
-        elif isinstance(nbr, Fraction):
-            NouvelleFraction = Fraction(self.numerateur * nbr.denominateur + self.denominateur * nbr.numerateur, self.denominateur * nbr.denominateur)
-            return NouvelleFraction
-        else:
-            raise TypeError(f"Opération impossible entre Fraction et {type(nbr)}")
+JUMP_HEIGHT = 20
 
-    def __mul__(self, nbr):
-        if isinstance(nbr, int):
-            NouvelleFraction = Fraction(self.numerateur * nbr, self.denominateur)
-            return NouvelleFraction
-        elif isinstance(nbr, Fraction):
-            NouvelleFraction = Fraction(self.numerateur * nbr.numerateur, self.denominateur * nbr.denominateur)
-            return NouvelleFraction
-        else:
-            raise TypeError(f"Opération impossible entre Fraction et {type(nbr)}")
+Y_VELOCITY = JUMP_HEIGHT
 
-    def __pow__(self, pow):
-        NouvelleFraction = Fraction(self.numerateur ** pow, self.denominateur ** pow)
-        return NouvelleFraction
+STANDING_SURFACE = pygame.transform.scale(pygame.image.load("assets/mario_standing.png"), (48, 64))
 
-    def __rmul__(self, nbr):
-        return self * nbr
+JUMPING_SURFACE = pygame.transform.scale(pygame.image.load("assets/mario_jumping.png"), (48, 64))
 
-    def __rpow__(self, pow):
-        return self ** pow
+BACKGROUND = pygame.image.load("assets/background.png")
 
-    def __radd__(self, nbr):
-        return self + nbr
+mario_rect = STANDING_SURFACE.get_rect(center=(X_POSITION, Y_POSITION))
 
-    def __eq__(self, nbr):
-        return
+while True:
 
-    def __ne__(self, other):
-        pass
+    for event in pygame.event.get():
 
+        if event.type == pygame.QUIT:
+            pygame.quit()
 
-divise = Fraction(7, 8)
+            sys.exit()
 
-def float(nbr: Fraction = divise):
-    return nbr.numerateur/nbr.denominateur
+        keys_pressed = pygame.key.get_pressed()
 
+        if keys_pressed[pygame.K_SPACE]:
+            jumping = True
+
+    ecran.blit(BACKGROUND, (0, 0))
+
+    if jumping:
+        Y_POSITION -= Y_VELOCITY
+        Y_VELOCITY -= Y_GRAVITY
+        if Y_VELOCITY < -JUMP_HEIGHT:
+            jumping = False
+            Y_VELOCITY = JUMP_HEIGHT
+        mario_rect = JUMPING_SURFACE.get_rect(center=(X_POSITION, Y_POSITION))
+    else:
+        mario_rect = STANDING_SURFACE.get_rect(center=(X_POSITION, Y_POSITION))
+
+    ecran.blit(STANDING_SURFACE, mario_rect)
+    pygame.display.flip()
+    CLOCK.tick(60)
