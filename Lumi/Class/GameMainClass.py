@@ -10,7 +10,6 @@ pygame.init()
 class Main:
 
     def __init__(self, width=1920, height=1080, name="Lumi", fps=60):
-
         self.clock = pygame.time.Clock()
         self.width = width
         self.height = height
@@ -50,6 +49,7 @@ class Main:
                         angle = self.__player.get_angle(self.__player.x, self.__player.y, mouse_x, mouse_y)
                         self.projectiles.append(PCP.Projectile(self.__player.x, self.__player.y, angle))
                         self.__player.main_attack -= 1
+                        self.__player.start_attack()
 
         if len(self.items) != 0:
             for item in self.items:
@@ -61,7 +61,6 @@ class Main:
 
     def update_display(self):
         self.__player.update()
-        self.__player.update_animation()
         self.background.draw_bg(self.__screen, self.__player.scroll)
 
         for projectile in self.projectiles + self.ulti:
