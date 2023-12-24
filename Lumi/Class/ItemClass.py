@@ -18,10 +18,8 @@ class Item:
             pygame.draw.rect(screen, color, (self.x, self.y, self.width, self.height))
 
     def check_collision(self, player):
-        if (player.x < self.x + self.width and
-            player.x + player.width > self.x and
-            player.y < self.y + self.height and
-            player.y + player.height > self.y):
+        if (player.x < self.x + self.width and player.x + player.width > self.x and
+            player.y < self.y + self.height and player.y + player.height > self.y):
             return True
         return False
 

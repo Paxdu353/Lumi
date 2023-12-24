@@ -2,6 +2,7 @@ import pygame
 import Lumi.Class.PlayerClass as PC
 import Lumi.Class.ProjectileClass as PCP
 import Lumi.Class.ItemClass as IC
+import Lumi.Class.BackgroundClass as BC
 
 pygame.init()
 
@@ -20,19 +21,8 @@ class Main:
         self.projectiles = []
         self.ulti = []
         self.items = []
-        self.background = [pygame.image.load(f'Class/images/{img}.png').convert_alpha() for img in range(1, 8)]
-        self.width_background = self.background[0].get_width()
-        self.scroll = 0
+        self.background = BC.Background('MAIN')
         pygame.display.set_caption(self.__name)
-
-
-    def draw_bg(self):
-        for x in range(5):
-            speed = 1
-            for i in self.background:
-                self.__screen.blit(i, ((x*self.width_background) - self.__player.scroll * speed, 0))
-                speed += 0.2
-
 
 
     def main_events(self):
@@ -43,24 +33,19 @@ class Main:
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    print("JUMP") #DEV LOG
                     self.__player.jump()
 
                 elif event.key == pygame.K_s:
                     if len(self.ulti) == 0 and len(self.projectiles) == 0 and self.__player.ultime_attack > 0:
-                        print(f"ultime at x={pygame.mouse.get_pos()[0]}, y= {pygame.mouse.get_pos()[1]}") #DEV LOG
                         mouse_x, mouse_y = pygame.mouse.get_pos()
                         angle = self.__player.get_angle(self.__player.x, self.__player.y, mouse_x, mouse_y)
                         self.__player.ultime_attack -= 1
                         for i in range(3):
                             self.ulti.append(PCP.Projectile(self.__player.x, self.__player.y, angle, 7-i))
 
-
-
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if len(self.projectiles) == 0 and len(self.ulti) == 0 and self.__player.main_attack > 0:
-                        print(f"attack at x={pygame.mouse.get_pos()[0]}, y={pygame.mouse.get_pos()[1]}") #DEV LOG
                         mouse_x, mouse_y = pygame.mouse.get_pos()
                         angle = self.__player.get_angle(self.__player.x, self.__player.y, mouse_x, mouse_y)
                         self.projectiles.append(PCP.Projectile(self.__player.x, self.__player.y, angle))
@@ -72,18 +57,11 @@ class Main:
                     item.collect(self.__player)
 
         cle = pygame.key.get_pressed()
-        self.__player.move(cle, self.width, 3000)
-
-
-
-
+        self.__player.move(cle)
 
     def update_display(self):
-
         self.__player.update()
-        self.draw_bg()
-
-
+        self.background.draw_bg(self.__screen, self.__player.scroll)
 
         for projectile in self.projectiles + self.ulti:
             projectile.move()
@@ -97,10 +75,7 @@ class Main:
         for item in self.items:
             item.draw(self.__screen)
 
-
-
     def draw(self):
-
         self.__player.draw(self.__screen)
         self.__player.draw_ammo(self.__screen)
         pygame.display.flip()

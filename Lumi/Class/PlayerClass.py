@@ -18,25 +18,15 @@ class Player():
         self.__jumps_left = 2
         self.__is_jumping = False
 
-
-    def adjust_scroll(self, scroll_amount, width_screen, world_width):
-        self.scroll += scroll_amount * self.parallax_factor
-        self.scroll = max(0, min(self.scroll, world_width - width_screen))
-
-
-    def move(self, cle, width_screen, world_width):
-        left_limit = width_screen / 4
-        right_limit = width_screen * 3 / 4
+    def move(self, cle):
         if cle[pygame.K_q]:
-            if self.x > left_limit:
-                self.x -= self.__velocity
-            else:
-                self.adjust_scroll(-self.__velocity, width_screen, world_width)
+            self.x -= self.__velocity
+            if self.scroll > 0: self.scroll -= 1
+
         elif cle[pygame.K_d]:
-            if self.x < right_limit:
-                self.x += self.__velocity
-            else:
-                self.adjust_scroll(self.__velocity, width_screen, world_width)
+            self.x += self.__velocity
+            if self.scroll < 3000: self.scroll += 1
+
 
     def jump(self):
         if self.__jumps_left > 0:
