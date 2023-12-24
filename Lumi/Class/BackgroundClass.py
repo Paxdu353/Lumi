@@ -4,7 +4,7 @@ class Background:
 
     def __init__(self, name):
         self.name = name
-        self.background = [pygame.image.load(f'Class/images/{img}.png').convert_alpha() for img in range(1, 8)]
+        self.background = [pygame.image.load(f'images/Background_1/{img}.png').convert_alpha() for img in range(1, 8)]
         self.width_background = self.background[0].get_width()
         self.increment_speed = 0.4
 

@@ -1,9 +1,11 @@
 import pygame
 import math
+import AnimationClass as AC
 
-class Player():
+class Player(AC.AnimationSprite):
 
     def __init__(self, x_pos, y_pos, main_attack = 10, ultime_attack = 4 , width = 32 , height = 32):
+        super().__init__("Player")
         self.x = x_pos
         self.y = y_pos
         self.width = width
@@ -27,13 +29,15 @@ class Player():
             self.x += self.__velocity
             if self.scroll < 3000: self.scroll += 1
 
-
     def jump(self):
         if self.__jumps_left > 0:
             self.__is_jumping = True
             self.__velocity_y = - self.__jump_height
             self.__jumps_left -= 1
 
+
+    def update_animation(self):
+        self.animate()
 
     def update(self):
         if self.__is_jumping:

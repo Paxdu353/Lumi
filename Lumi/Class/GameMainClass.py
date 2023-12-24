@@ -61,6 +61,7 @@ class Main:
 
     def update_display(self):
         self.__player.update()
+        self.__player.update_animation()
         self.background.draw_bg(self.__screen, self.__player.scroll)
 
         for projectile in self.projectiles + self.ulti:
