@@ -20,9 +20,8 @@ class Main:
         self.projectiles = []
         self.ulti = []
         self.items = []
-        self.background = BC.Background('MAIN')
+        self.background = BC.Background('Background_1')
         pygame.display.set_caption(self.__name)
-
 
     def main_events(self):
         for event in pygame.event.get():
@@ -39,8 +38,14 @@ class Main:
                         mouse_x, mouse_y = pygame.mouse.get_pos()
                         angle = self.__player.get_angle(self.__player.x, self.__player.y, mouse_x, mouse_y)
                         self.__player.ultime_attack -= 1
+                        self.__player.is_attack = True
+                        self.__player.current_image = 0
                         for i in range(3):
                             self.ulti.append(PCP.Projectile(self.__player.x, self.__player.y, angle, 7-i))
+
+                elif event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    exit()
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -49,7 +54,8 @@ class Main:
                         angle = self.__player.get_angle(self.__player.x, self.__player.y, mouse_x, mouse_y)
                         self.projectiles.append(PCP.Projectile(self.__player.x, self.__player.y, angle))
                         self.__player.main_attack -= 1
-                        self.__player.start_attack()
+                        self.__player.is_attack = True
+                        self.__player.current_image = 0
 
         if len(self.items) != 0:
             for item in self.items:
@@ -78,6 +84,7 @@ class Main:
     def draw(self):
         self.__player.draw(self.__screen)
         self.__player.draw_ammo(self.__screen)
+        pygame.draw.rect(self.__screen, (0, 0, 255), (800, 960, 100, 100))
         pygame.display.flip()
 
     def run(self):

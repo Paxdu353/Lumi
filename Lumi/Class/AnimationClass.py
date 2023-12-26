@@ -41,6 +41,5 @@ animations = {
         'Idle': load_animation('Player', 'Idle'),
         'Walk': load_animation('Player', 'Walk'),
         'Attack': load_animation('Player', 'Attack')
-
     }
 }
