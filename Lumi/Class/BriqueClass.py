@@ -1,28 +1,28 @@
 import pygame
 
-
 class Brique:
-
     def __init__(self, x_pos, y_pos, width, height, screen, color=(255, 255, 255)):
-        self.__x_pos = x_pos
-        self.__y_pos = y_pos
-        self.__width = width
-        self.__height = height
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+        self.width = width
+        self.height = height
 
         self.__screen = screen
         self.__is_visible = True
-        self.__init = pygame.Rect(x_pos, y_pos, width, height)
         self.__color = color
 
 
     def resize(self, width, height):
-        self.__init = pygame.Rect(self.__x_pos, self.__y_pos, width, height)
+        self.height = height
+        self.width = width
 
     def relocate(self, x_pos, y_pos):
-        self.__init = pygame.Rect(x_pos, y_pos, self.__width, self.__height)
+        self.x_pos = x_pos
+        self.y_pos = y_pos
 
     def change(self, x_pos, y_pos, width, height):
-        self.__init = pygame.Rect(x_pos, y_pos, width, height)
+        self.relocate(x_pos, y_pos)
+        self.resize(width, height)
 
     def change_color(self, r, g, b):
         self.__color = (r, g, b)
@@ -34,5 +34,8 @@ class Brique:
         self.__is_visible = False
 
     def draw(self, screen):
-        if self.__is_visible:
-            pygame.draw.rect(screen, self.color, self.__init)
+        if self.__is_visible and (self.x_pos > 0 - self.width) and self.y_pos <= 1920:
+            pygame.draw.rect(screen, self.__color, pygame.Rect(self.x_pos, self.y_pos, self.width, self.height))
+
+    def __repr__(self):
+        return f"X:{self.x_pos}, Y:{self.y_pos}"

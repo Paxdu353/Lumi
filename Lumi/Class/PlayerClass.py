@@ -16,8 +16,8 @@ class Player(AC.AnimationSprite):
         self.is_attack = False
         self.original_img = self.image
         self.look = 'RIGHT'
-        self.__velocity = 3
-        self.__movement_vector = 1
+        self.velocity = 3
+        self.movement_vector = 0
         self.__velocity_y = 0
         self.__jump_height = 13
         self.__jumps_left = 2
@@ -26,7 +26,7 @@ class Player(AC.AnimationSprite):
 
 
     def update_animation_state(self):
-        if self.__movement_vector != 0 and not self.is_attack:
+        if self.movement_vector != 0 and not self.is_attack:
             self.images_list = AC.animations['Player']['Walk']
 
         if self.is_attack:
@@ -36,7 +36,7 @@ class Player(AC.AnimationSprite):
                 self.is_attack = False
                 self.animation_delay = 75
 
-        if not self.is_attack and self.__movement_vector == 0:
+        if not self.is_attack and self.movement_vector == 0:
             self.images_list = AC.animations['Player']['Idle']
 
 
@@ -44,22 +44,22 @@ class Player(AC.AnimationSprite):
     def move(self, cle):
         moving = False
         if cle[pygame.K_q]:
-            self.x -= self.__velocity
+            self.x -= self.velocity
             moving = True
-            self.__movement_vector = -1
+            self.movement_vector = -1
             self.look = 'LEFT'
             if self.scroll > 0: self.scroll -= 1
 
         elif cle[pygame.K_d]:
-            self.x += self.__velocity
+            self.x += self.velocity
             moving = True
-            self.__movement_vector = 1
+            self.movement_vector = 1
 
             self.look = 'RIGHT'
             if self.scroll < 3000: self.scroll += 1
 
         else:
-            self.__movement_vector = 0
+            self.movement_vector = 0
 
 
 
@@ -72,7 +72,6 @@ class Player(AC.AnimationSprite):
 
 
     def update(self):
-
         self.update_animation_state()
 
 

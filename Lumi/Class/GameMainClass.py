@@ -2,7 +2,8 @@ import pygame
 import Lumi.Class.PlayerClass as PC
 import Lumi.Class.ProjectileClass as PCP
 import Lumi.Class.ItemClass as IC
-import Lumi.Class.BackgroundClass as BC
+import Lumi.Class.MapClass as MC
+
 
 pygame.init()
 
@@ -20,10 +21,12 @@ class Main:
         self.projectiles = []
         self.ulti = []
         self.items = []
-        self.background = BC.Background('Background_1')
+        self.map = MC.Map(self.__screen, 'Background_1')
+        self.map.add_brique(800, 500, 100, 100, (255, 255, 0))
         pygame.display.set_caption(self.__name)
 
     def main_events(self):
+        self.map.draw(self.__player.scroll)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -66,9 +69,8 @@ class Main:
         self.__player.move(cle)
 
     def update_display(self):
-        self.__player.update()
-        self.background.draw_bg(self.__screen, self.__player.scroll)
 
+        self.__player.update()
         for projectile in self.projectiles + self.ulti:
             projectile.move()
             projectile.DrawMainAttack(self.__screen)
@@ -78,13 +80,20 @@ class Main:
                 else:
                     self.ulti.remove(projectile)
 
-        for item in self.items:
-            item.draw(self.__screen)
+        if self.__player.movement_vector != 0:
+            for brique in self.map.briques:
+                brique.relocate(brique.x_pos + (self.__player.velocity * -self.__player.movement_vector), brique.y_pos)
+                print(brique.x_pos, brique.y_pos)
+
+
+
+
 
     def draw(self):
         self.__player.draw(self.__screen)
+        for item in self.items:
+            item.draw(self.__screen)
         self.__player.draw_ammo(self.__screen)
-        pygame.draw.rect(self.__screen, (0, 0, 255), (800, 960, 100, 100))
         pygame.display.flip()
 
     def run(self):
