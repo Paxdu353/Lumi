@@ -90,6 +90,7 @@ class Main:
 
 
     def draw(self):
+        self.map.TiledMap(self.__screen, 40)
         self.__player.draw(self.__screen)
         for item in self.items:
             item.draw(self.__screen)

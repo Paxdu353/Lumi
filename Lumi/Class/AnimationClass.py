@@ -9,7 +9,7 @@ class AnimationSprite(pygame.sprite.Sprite):
         self.current_image = 0
         self.animation_delay = 75
         self.last_update_time = pygame.time.get_ticks()
-        self.image = pygame.transform.scale(pygame.image.load(f"images/{target}/{movement}/Idle_1.png"), (240, 190))
+        self.image = pygame.transform.scale(pygame.image.load(f"images/Player/Idle/Idle_1.png"), (240, 190))
         self.images_list = animations.get(target).get(movement)
 
     def animate(self):
