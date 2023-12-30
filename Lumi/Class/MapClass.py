@@ -74,6 +74,10 @@ class Map:
             if brique.collidepoint(x, y):
                 self.briques.remove(brique)
 
+
+    def RemoveAllRect(self):
+        self.briques = []
+
     def draw(self, scroll):
         self.background.draw_bg(self.screen, scroll)
         for brique in self.briques:
