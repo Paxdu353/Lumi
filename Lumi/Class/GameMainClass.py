@@ -3,8 +3,6 @@ import Lumi.Class.PlayerClass as PC
 import Lumi.Class.ProjectileClass as PCP
 import Lumi.Class.ItemClass as IC
 import Lumi.Class.MapClass as MC
-
-
 pygame.init()
 
 
@@ -21,8 +19,9 @@ class Main:
         self.projectiles = []
         self.ulti = []
         self.items = []
+        self.DrawMode = True
         self.map = MC.Map(self.__screen, 'Background_1')
-        self.map.add_brique(800, 500, 100, 100, (255, 255, 0))
+        self.map.add_brique(800, 500, 64, 64, (255, 255, 0))
         pygame.display.set_caption(self.__name)
 
     def main_events(self):
@@ -52,6 +51,9 @@ class Main:
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
+                    if self.DrawMode:
+                        self.map.DrawRect(self.__screen)
+
                     if len(self.projectiles) == 0 and len(self.ulti) == 0 and self.__player.main_attack > 0:
                         mouse_x, mouse_y = pygame.mouse.get_pos()
                         angle = self.__player.get_angle(self.__player.x, self.__player.y, mouse_x, mouse_y)
@@ -59,6 +61,18 @@ class Main:
                         self.__player.main_attack -= 1
                         self.__player.is_attack = True
                         self.__player.current_image = 0
+
+                elif event.button == 3:
+                    if self.DrawMode:
+                        self.map.RemoveRect()
+
+                elif event.button == 4:
+                    if self.DrawMode:
+                        print(self.map.scroll_tile(1))
+
+                elif event.button == 5:
+                    if self.DrawMode:
+                        print(self.map.scroll_tile(-1))
 
         if len(self.items) != 0:
             for item in self.items:
@@ -69,7 +83,6 @@ class Main:
         self.__player.move(cle)
 
     def update_display(self):
-
         self.__player.update()
         for projectile in self.projectiles + self.ulti:
             projectile.move()
@@ -83,14 +96,13 @@ class Main:
         if self.__player.movement_vector != 0:
             for brique in self.map.briques:
                 brique.relocate(brique.x_pos + (self.__player.velocity * -self.__player.movement_vector), brique.y_pos)
-                print(brique.x_pos, brique.y_pos)
-
-
-
-
 
     def draw(self):
-        self.map.TiledMap(self.__screen, 40)
+        if self.DrawMode:
+            number_of_cells = self.map.background.loop * self.map.background.width_background // 64
+            self.map.DrawMode(self.__screen, number_of_cells, self.__player.movement_vector, self.__player.velocity)
+            self.map.update(self.__player.movement_vector, self.__player.velocity)
+
         self.__player.draw(self.__screen)
         for item in self.items:
             item.draw(self.__screen)

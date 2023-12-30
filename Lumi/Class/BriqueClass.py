@@ -6,7 +6,6 @@ class Brique:
         self.y_pos = y_pos
         self.width = width
         self.height = height
-
         self.__screen = screen
         self.__is_visible = True
         self.__color = color
@@ -36,6 +35,13 @@ class Brique:
     def draw(self, screen):
         if self.__is_visible and (self.x_pos > 0 - self.width) and self.y_pos <= 1920:
             pygame.draw.rect(screen, self.__color, pygame.Rect(self.x_pos, self.y_pos, self.width, self.height))
+
+    def collidepoint(self, x, y):
+        return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height).collidepoint(x, y)
+
+    def colliderect(self, rect):
+        return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height).colliderect(rect)
+
 
     def __repr__(self):
         return f"X:{self.x_pos}, Y:{self.y_pos}"
