@@ -7,21 +7,22 @@ class Map:
         self.briques = []
         self.background = BAC.Background(background_name)
         self.grid_offset_x = 0
-        self.sroll_tile = {
-            '0': (255, 0, 0),
-            '1':  (255, 255, 0),
-            '2': (255, 255, 255),
-            '3': (0, 0, 255)
+        self.tile_list = {
+            1: (255, 0, 0),
+            2:  (255, 255, 0),
+            3: (255, 255, 255),
+            4: (0, 0, 255)
         }
-        self.current_scroll = 0
+        self.current_scroll = 1
 
 
     def add_brique(self, x_pos, y_pos, width, height, color=(255, 255, 255)):
         nouvelle_brique = BRC.Brique(x_pos, y_pos, width, height, self.screen, color)
         self.briques.append(nouvelle_brique)
 
-    def update(self, player_velocity, player_movement_vector):
-        self.grid_offset_x += player_velocity * -player_movement_vector
+    def update(self, player_velocity, player_movement_vector, bg_scroll):
+        if bg_scroll > 0:
+            self.grid_offset_x += player_velocity * -player_movement_vector
 
     def TiledMap(self, screen, size):
         for line in range(size):
@@ -36,23 +37,36 @@ class Map:
         screen.blit(text, (10, 25))
 
     def scroll_tile(self, next_index):
-        if next_index == -1 and self.current_scroll == 0:
-            return self.sroll_tile[0]
+        if next_index == -1 and self.current_scroll == 1:
+            self.current_scroll = len(self.tile_list)
+
+        elif self.current_scroll == len(self.tile_list) and next_index == 1:
+            self.current_scroll = 1
+
         else:
-            return self.sroll_tile[self.current_scroll + next_index]
+            self.current_scroll = self.current_scroll + next_index
+            print('test')
 
 
 
-    def DrawMode(self, screen, size, mouvement_vector, velocity):
+    def DrawScrollText(self, screen):
+        scroll_text = f"COULEUR UTILISER"
+        font = pygame.font.SysFont(None, 24)
+        text = font.render(scroll_text, True, self.tile_list[self.current_scroll])
+        screen.blit(text, (10, 40))
+
+
+    def DrawMode(self, screen, size):
         self.TiledMap(screen, size)
         self.DrawModeText(screen)
 
 
-    def DrawRect(self, screen):
+    def DrawRect(self, screen, bg_scroll):
         x, y = pygame.mouse.get_pos()
         x = (x-self.grid_offset_x)//64
         y = y//64
-        brique = BRC.Brique(x*64 + self.grid_offset_x, y*64, 64, 64, screen)
+
+        brique = BRC.Brique(x*64 + self.grid_offset_x, y*64, 64, 64, screen, self.tile_list[self.current_scroll])
         if brique not in self.briques:
             self.briques.append(brique)
 
@@ -67,4 +81,3 @@ class Map:
         self.background.draw_bg(self.screen, scroll)
         for brique in self.briques:
             brique.draw(self.screen)
-

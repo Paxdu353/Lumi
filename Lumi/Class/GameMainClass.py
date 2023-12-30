@@ -19,9 +19,8 @@ class Main:
         self.projectiles = []
         self.ulti = []
         self.items = []
-        self.DrawMode = True
+        self.DrawMode = False
         self.map = MC.Map(self.__screen, 'Background_1')
-        self.map.add_brique(800, 500, 64, 64, (255, 255, 0))
         pygame.display.set_caption(self.__name)
 
     def main_events(self):
@@ -45,14 +44,22 @@ class Main:
                         for i in range(3):
                             self.ulti.append(PCP.Projectile(self.__player.x, self.__player.y, angle, 7-i))
 
+                elif event.key == pygame.K_k:
+                    if self.DrawMode == True:
+                        self.DrawMode = False
+                    else:
+                        self.DrawMode = True
+
                 elif event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     exit()
 
+
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if self.DrawMode:
-                        self.map.DrawRect(self.__screen)
+                        self.map.DrawRect(self.__screen, self.__player.scroll)
 
                     if len(self.projectiles) == 0 and len(self.ulti) == 0 and self.__player.main_attack > 0:
                         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -68,11 +75,12 @@ class Main:
 
                 elif event.button == 4:
                     if self.DrawMode:
-                        print(self.map.scroll_tile(1))
+                        self.map.scroll_tile(1)
 
                 elif event.button == 5:
                     if self.DrawMode:
-                        print(self.map.scroll_tile(-1))
+                        self.map.scroll_tile(-1)
+
 
         if len(self.items) != 0:
             for item in self.items:
@@ -95,13 +103,15 @@ class Main:
 
         if self.__player.movement_vector != 0:
             for brique in self.map.briques:
-                brique.relocate(brique.x_pos + (self.__player.velocity * -self.__player.movement_vector), brique.y_pos)
+                if self.__player.scroll > 0:
+                    brique.relocate(brique.x_pos + (self.__player.velocity * -self.__player.movement_vector), brique.y_pos)
 
     def draw(self):
         if self.DrawMode:
             number_of_cells = self.map.background.loop * self.map.background.width_background // 64
-            self.map.DrawMode(self.__screen, number_of_cells, self.__player.movement_vector, self.__player.velocity)
-            self.map.update(self.__player.movement_vector, self.__player.velocity)
+            self.map.DrawMode(self.__screen, number_of_cells)
+            self.map.update(self.__player.movement_vector, self.__player.velocity, self.__player.scroll)
+            self.map.DrawScrollText(self.__screen)
 
         self.__player.draw(self.__screen)
         for item in self.items:

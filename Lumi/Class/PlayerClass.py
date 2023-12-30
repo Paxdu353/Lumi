@@ -48,15 +48,16 @@ class Player(AC.AnimationSprite):
             moving = True
             self.movement_vector = -1
             self.look = 'LEFT'
-            if self.scroll > 0: self.scroll -= 1
+            if self.scroll > 0:
+                self.scroll -= 1
 
         elif cle[pygame.K_d]:
             self.x += self.velocity
             moving = True
             self.movement_vector = 1
-
             self.look = 'RIGHT'
-            if self.scroll < 3000: self.scroll += 1
+            if self.scroll < 3000:
+                self.scroll += 1
 
         else:
             self.movement_vector = 0
