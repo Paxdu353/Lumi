@@ -1,8 +1,9 @@
 import pygame
+
+import Lumi.Class.MapClass as MC
 import Lumi.Class.PlayerClass as PC
 import Lumi.Class.ProjectileClass as PCP
-import Lumi.Class.ItemClass as IC
-import Lumi.Class.MapClass as MC
+
 pygame.init()
 
 
@@ -15,7 +16,7 @@ class Main:
         self.__name = name
         self.fps = fps
         self.__screen = pygame.display.set_mode((self.width, self.height))
-        self.__player = PC.Player(self.width/2, height - 118)
+        self.__player = PC.Player(self.width / 2, height - 118)
         self.projectiles = []
         self.ulti = []
         self.items = []
@@ -42,7 +43,7 @@ class Main:
                         self.__player.is_attack = True
                         self.__player.current_image = 0
                         for i in range(3):
-                            self.ulti.append(PCP.Projectile(self.__player.x, self.__player.y, angle, 7-i))
+                            self.ulti.append(PCP.Projectile(self.__player.x, self.__player.y, angle, 7 - i))
 
                 elif event.key == pygame.K_k:
                     if self.DrawMode == True:
@@ -81,7 +82,6 @@ class Main:
                     if self.DrawMode:
                         self.map.scroll_tile(-1)
 
-
         if len(self.items) != 0:
             for item in self.items:
                 if item.check_collision(self.__player) and not item.collected:
@@ -104,7 +104,8 @@ class Main:
         if self.__player.movement_vector != 0:
             for brique in self.map.briques:
                 if self.__player.scroll > 0:
-                    brique.relocate(brique.x_pos + (self.__player.velocity * -self.__player.movement_vector), brique.y_pos)
+                    brique.relocate(brique.x_pos + (self.__player.velocity * -self.__player.movement_vector),
+                                    brique.y_pos)
 
     def draw(self):
         if self.DrawMode:
@@ -125,5 +126,3 @@ class Main:
             self.update_display()
             self.draw()
             self.clock.tick(self.fps)
-
-

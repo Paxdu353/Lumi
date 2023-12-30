@@ -1,5 +1,6 @@
 import pygame
 
+
 class Brique:
     def __init__(self, x_pos, y_pos, width, height, screen, color=(255, 255, 255)):
         self.x_pos = x_pos
@@ -9,7 +10,6 @@ class Brique:
         self.__screen = screen
         self.__is_visible = True
         self.__color = color
-
 
     def resize(self, width, height):
         self.height = height
@@ -41,7 +41,6 @@ class Brique:
 
     def colliderect(self, rect):
         return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height).colliderect(rect)
-
 
     def __repr__(self):
         return f"X:{self.x_pos}, Y:{self.y_pos}"

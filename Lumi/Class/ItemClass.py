@@ -1,5 +1,6 @@
 import pygame
 
+
 class Item:
     def __init__(self, x, y, item_type):
         self.x = x
@@ -19,7 +20,7 @@ class Item:
 
     def check_collision(self, player):
         if (player.x < self.x + self.width and player.x + player.width > self.x and
-            player.y < self.y + self.height and player.y + player.height > self.y):
+                player.y < self.y + self.height and player.y + player.height > self.y):
             return True
         return False
 

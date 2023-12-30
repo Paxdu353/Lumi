@@ -1,5 +1,7 @@
-import pygame
 import math
+
+import pygame
+
 
 class Projectile:
     def __init__(self, x, y, angle, speed=7):
@@ -15,6 +17,3 @@ class Projectile:
 
     def DrawMainAttack(self, screen):
         pygame.draw.rect(screen, (0, 0, 255), (self.x, self.y, 20, 20))
-
-
-

@@ -1,5 +1,6 @@
 import pygame
 
+
 class AnimationSprite(pygame.sprite.Sprite):
 
     def __init__(self, target, movement):
@@ -32,8 +33,6 @@ def load_animation(target, movement):
         images.append(pygame.transform.scale(pygame.image.load(image), (250, 200)))
 
     return images
-
-
 
 
 animations = {

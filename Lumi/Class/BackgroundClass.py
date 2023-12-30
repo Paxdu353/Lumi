@@ -1,6 +1,7 @@
 import pygame
-class Background:
 
+
+class Background:
 
     def __init__(self, name):
         self.name = name
@@ -9,11 +10,11 @@ class Background:
         self.loop = 5
         self.increment_speed = 0.4
 
-    def draw_bg(self,screen,  scroll):
+    def draw_bg(self, screen, scroll):
         for x in range(self.loop):
             speed = 1
             for i in self.background:
-                screen.blit(i, ((x*self.width_background) - scroll * speed, 0))
+                screen.blit(i, ((x * self.width_background) - scroll * speed, 0))
                 speed += self.increment_speed
 
     def __repr__(self):
