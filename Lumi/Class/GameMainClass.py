@@ -51,6 +51,13 @@ class Main:
                     else:
                         self.DrawMode = True
 
+                elif event.key == pygame.K_j:
+                    print(self.map.briques)
+
+                elif event.key == pygame.K_x:
+                    self.map.briques = []
+
+
                 elif event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     exit()

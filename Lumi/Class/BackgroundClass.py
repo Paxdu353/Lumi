@@ -14,8 +14,10 @@ class Background:
         for x in range(self.loop):
             speed = 1
             for i in self.background:
-                screen.blit(i, ((x * self.width_background) - scroll * speed, 0))
+                if scroll > 0:
+                    screen.blit(i, ((x * self.width_background) - scroll * speed, 0))
+                else:
+                    screen.blit(i, ((x * self.width_background) * speed, 0))
                 speed += self.increment_speed
 
-    def __repr__(self):
-        return f"Background name: {self.name}"
+

@@ -7,7 +7,14 @@ import Lumi.Class.BriqueClass as BRC
 class Map:
     def __init__(self, screen, background_name):
         self.screen = screen
-        self.briques = []
+        self.briques = [512, 256, 64, 64, (255, 255, 0), 512, 320, 64, 64, (255, 255, 0), 512, 384, 64, 64, (255, 255, 0), 576, 256, 64, 64, (0, 0, 255), 576, 320, 64, 64, (0, 0, 255), 576, 384, 64, 64, (0, 0, 255), 640, 256, 64, 64, (255, 0, 0), 640, 320, 64, 64, (255, 0, 0), 640, 384, 64, 64, (255, 0, 0)]
+        if len(self.briques) != 0:
+            len_rect = 5
+            load = self.briques
+            self.briques = []
+            liste = [load[i:i + len_rect] for i in range(0, len(load), len_rect)]
+            for brique in liste:
+                self.add_brique(brique[0], brique[1], brique[2], brique[3], brique[4])
         self.background = BAC.Background(background_name)
         self.grid_offset_x = 0
         self.tile_list = {
@@ -47,7 +54,6 @@ class Map:
 
         else:
             self.current_scroll = self.current_scroll + next_index
-            print('test')
 
     def DrawScrollText(self, screen):
         scroll_text = f"COULEUR UTILISER"
