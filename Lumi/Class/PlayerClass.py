@@ -43,7 +43,10 @@ class Player(AC.AnimationSprite):
 
     def move(self, cle):
         moving = False
-        if cle[pygame.K_q]:
+
+        if cle[pygame.K_q] and cle[pygame.K_d]:
+            self.movement_vector = 0
+        elif cle[pygame.K_q]:
             self.x -= self.velocity
             moving = True
             self.movement_vector = -1

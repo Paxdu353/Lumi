@@ -7,7 +7,20 @@ import Lumi.Class.BriqueClass as BRC
 class Map:
     def __init__(self, screen, background_name):
         self.screen = screen
-        self.briques = [512, 256, 64, 64, (255, 255, 0), 512, 320, 64, 64, (255, 255, 0), 512, 384, 64, 64, (255, 255, 0), 576, 256, 64, 64, (0, 0, 255), 576, 320, 64, 64, (0, 0, 255), 576, 384, 64, 64, (0, 0, 255), 640, 256, 64, 64, (255, 0, 0), 640, 320, 64, 64, (255, 0, 0), 640, 384, 64, 64, (255, 0, 0)]
+        self.briques = []
+        self.background = BAC.Background(background_name)
+        self.grid_offset_x = 0
+        self.tile_list = {
+            1: (255, 0, 0),
+            2: (255, 255, 0),
+            3: (255, 255, 255),
+            4: (0, 0, 255),
+            5: (178, 227, 157)
+        }
+        self.spawn = False
+        self.current_scroll = 1
+
+
         if len(self.briques) != 0:
             len_rect = 5
             load = self.briques
@@ -15,15 +28,14 @@ class Map:
             liste = [load[i:i + len_rect] for i in range(0, len(load), len_rect)]
             for brique in liste:
                 self.add_brique(brique[0], brique[1], brique[2], brique[3], brique[4])
-        self.background = BAC.Background(background_name)
-        self.grid_offset_x = 0
-        self.tile_list = {
-            1: (255, 0, 0),
-            2: (255, 255, 0),
-            3: (255, 255, 255),
-            4: (0, 0, 255)
-        }
-        self.current_scroll = 1
+
+
+    def DrawMode(self, screen, size):
+        self.TiledMap(screen, size)
+        self.DrawModeText(screen)
+
+
+
 
     def add_brique(self, x_pos, y_pos, width, height, color=(255, 255, 255)):
         nouvelle_brique = BRC.Brique(x_pos, y_pos, width, height, self.screen, color)
@@ -39,11 +51,7 @@ class Map:
                              (line * 64 + self.grid_offset_x, 1080))
             pygame.draw.line(screen, (255, 255, 255), (0, line * 64), (size * 64 + self.grid_offset_x, line * 64))
 
-    def DrawModeText(self, screen):
-        mode_text = f'Mode draw activé'
-        font = pygame.font.SysFont(None, 24)
-        text = font.render(mode_text, True, (255, 255, 255))
-        screen.blit(text, (10, 25))
+
 
     def scroll_tile(self, next_index):
         if next_index == -1 and self.current_scroll == 1:
@@ -55,17 +63,29 @@ class Map:
         else:
             self.current_scroll = self.current_scroll + next_index
 
-    def DrawScrollText(self, screen):
-        scroll_text = f"COULEUR UTILISER"
-        font = pygame.font.SysFont(None, 24)
-        text = font.render(scroll_text, True, self.tile_list[self.current_scroll])
-        screen.blit(text, (10, 40))
 
-    def DrawMode(self, screen, size):
-        self.TiledMap(screen, size)
-        self.DrawModeText(screen)
 
-    def DrawRect(self, screen, bg_scroll):
+
+
+
+
+    def RemoveRect(self):
+        x, y = pygame.mouse.get_pos()
+        for brique in self.briques:
+            if brique.collidepoint(x, y):
+                self.briques.remove(brique)
+
+    def RemoveAllRect(self):
+        self.briques = []
+
+
+
+    def draw(self, scroll):
+        self.background.draw_bg(self.screen, scroll)
+        for brique in self.briques:
+            brique.draw(self.screen)
+
+    def DrawRect(self, screen):
         x, y = pygame.mouse.get_pos()
         x = (x - self.grid_offset_x) // 64
         y = y // 64
@@ -74,17 +94,14 @@ class Map:
         if brique not in self.briques:
             self.briques.append(brique)
 
-    def RemoveRect(self):
-        x, y = pygame.mouse.get_pos()
-        for brique in self.briques:
-            if brique.collidepoint(x, y):
-                self.briques.remove(brique)
+    def DrawModeText(self, screen):
+        mode_text = f'Mode draw activé'
+        font = pygame.font.SysFont(None, 24)
+        text = font.render(mode_text, True, (255, 255, 255))
+        screen.blit(text, (10, 25))
 
-
-    def RemoveAllRect(self):
-        self.briques = []
-
-    def draw(self, scroll):
-        self.background.draw_bg(self.screen, scroll)
-        for brique in self.briques:
-            brique.draw(self.screen)
+    def DrawScrollText(self, screen):
+        scroll_text = f"COULEUR UTILISER"
+        font = pygame.font.SysFont(None, 24)
+        text = font.render(scroll_text, True, self.tile_list[self.current_scroll])
+        screen.blit(text, (10, 40))

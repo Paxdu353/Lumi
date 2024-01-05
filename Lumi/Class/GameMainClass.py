@@ -52,7 +52,9 @@ class Main:
                         self.DrawMode = True
 
                 elif event.key == pygame.K_j:
-                    print(self.map.briques)
+                    with open('Level/briques_list.txt', 'w') as file:
+                        file.write(str(self.map.briques))
+
 
                 elif event.key == pygame.K_x:
                     self.map.briques = []
@@ -67,7 +69,7 @@ class Main:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if self.DrawMode:
-                        self.map.DrawRect(self.__screen, self.__player.scroll)
+                        self.map.DrawRect(self.__screen)
 
                     if len(self.projectiles) == 0 and len(self.ulti) == 0 and self.__player.main_attack > 0:
                         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -118,8 +120,9 @@ class Main:
         if self.DrawMode:
             number_of_cells = self.map.background.loop * self.map.background.width_background // 64
             self.map.DrawMode(self.__screen, number_of_cells)
-            self.map.update(self.__player.movement_vector, self.__player.velocity, self.__player.scroll)
             self.map.DrawScrollText(self.__screen)
+
+        self.map.update(self.__player.movement_vector, self.__player.velocity, self.__player.scroll)
 
         self.__player.draw(self.__screen)
         for item in self.items:
