@@ -56,7 +56,7 @@ class Main:
                         file.write(str(self.map.briques))
 
 
-                elif event.key == pygame.K_x:
+                elif event.key == pygame.K_x and self.DrawMode:
                     self.map.briques = []
 
 
@@ -71,7 +71,7 @@ class Main:
                     if self.DrawMode:
                         self.map.DrawRect(self.__screen)
 
-                    if len(self.projectiles) == 0 and len(self.ulti) == 0 and self.__player.main_attack > 0:
+                    elif len(self.projectiles) == 0 and len(self.ulti) == 0 and self.__player.main_attack > 0:
                         mouse_x, mouse_y = pygame.mouse.get_pos()
                         angle = self.__player.get_angle(self.__player.x, self.__player.y, mouse_x, mouse_y)
                         self.projectiles.append(PCP.Projectile(self.__player.x, self.__player.y, angle))
@@ -113,7 +113,7 @@ class Main:
         if self.__player.movement_vector != 0:
             for brique in self.map.briques:
                 if self.__player.scroll > 0:
-                    brique.relocate(brique.x_pos + (self.__player.velocity * -self.__player.movement_vector),
+                    brique.relocate(brique.x_pos + (3 * -self.__player.movement_vector),
                                     brique.y_pos)
 
     def draw(self):
@@ -122,7 +122,7 @@ class Main:
             self.map.DrawMode(self.__screen, number_of_cells)
             self.map.DrawScrollText(self.__screen)
 
-        self.map.update(self.__player.movement_vector, self.__player.velocity, self.__player.scroll)
+        self.map.update(self.__player.movement_vector, 3, self.__player.scroll)
 
         self.__player.draw(self.__screen)
         for item in self.items:

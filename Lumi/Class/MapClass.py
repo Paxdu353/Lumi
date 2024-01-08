@@ -34,9 +34,6 @@ class Map:
         self.TiledMap(screen, size)
         self.DrawModeText(screen)
 
-
-
-
     def add_brique(self, x_pos, y_pos, width, height, color=(255, 255, 255)):
         nouvelle_brique = BRC.Brique(x_pos, y_pos, width, height, self.screen, color)
         self.briques.append(nouvelle_brique)
@@ -62,11 +59,6 @@ class Map:
 
         else:
             self.current_scroll = self.current_scroll + next_index
-
-
-
-
-
 
 
     def RemoveRect(self):

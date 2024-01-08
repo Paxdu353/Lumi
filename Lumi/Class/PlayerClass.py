@@ -19,7 +19,7 @@ class Player(AC.AnimationSprite):
         self.is_attack = False
         self.original_img = self.image
         self.look = 'RIGHT'
-        self.velocity = 3
+        self.velocity = 0
         self.movement_vector = 0
         self.__velocity_y = 0
         self.__jump_height = 13
@@ -46,20 +46,36 @@ class Player(AC.AnimationSprite):
 
         if cle[pygame.K_q] and cle[pygame.K_d]:
             self.movement_vector = 0
+
         elif cle[pygame.K_q]:
-            self.x -= self.velocity
-            moving = True
-            self.movement_vector = -1
-            self.look = 'LEFT'
-            self.scroll -= 1
+            if self.scroll > 0:
+                moving = True
+                self.movement_vector = -1
+                self.look = 'LEFT'
+                self.scroll -= 1
+
+            else:
+                self.x -= 3
+                self.look = 'LEFT'
+                self.scroll -= 1
+                self.movement_vector = -1
+
+
+
 
         elif cle[pygame.K_d]:
-            self.x += self.velocity
-            moving = True
-            self.movement_vector = 1
-            self.look = 'RIGHT'
-            if self.scroll < 3000:
+            if self.scroll < 2500 and self.scroll >= 960:
                 self.scroll += 1
+                self.movement_vector = 1
+                self.look = 'RIGHT'
+
+
+            else:
+                self.x += 3
+                moving = True
+                self.movement_vector = 1
+                self.look = 'RIGHT'
+
 
         else:
             self.movement_vector = 0
