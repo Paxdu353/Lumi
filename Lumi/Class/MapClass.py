@@ -20,26 +20,13 @@ class Map:
         self.spawn = False
         self.current_scroll = 1
 
-
-        if len(self.briques) != 0:
-            len_rect = 5
-            load = self.briques
-            self.briques = []
-            liste = [load[i:i + len_rect] for i in range(0, len(load), len_rect)]
-            for brique in liste:
-                self.add_brique(brique[0], brique[1], brique[2], brique[3], brique[4])
-
-
     def DrawMode(self, screen, size):
         self.TiledMap(screen, size)
         self.DrawModeText(screen)
 
-
-
-
     def add_brique(self, x_pos, y_pos, width, height, color=(255, 255, 255)):
         nouvelle_brique = BRC.Brique(x_pos, y_pos, width, height, self.screen, color)
-        self.briques.append(nouvelle_brique)
+        self.briques.append(nouvelle_brique.list_info())
 
     def update(self, player_velocity, player_movement_vector, bg_scroll):
         if bg_scroll > 0:
@@ -63,12 +50,6 @@ class Map:
         else:
             self.current_scroll = self.current_scroll + next_index
 
-
-
-
-
-
-
     def RemoveRect(self):
         x, y = pygame.mouse.get_pos()
         for brique in self.briques:
@@ -77,7 +58,6 @@ class Map:
 
     def RemoveAllRect(self):
         self.briques = []
-
 
 
     def draw(self, scroll):
@@ -93,6 +73,10 @@ class Map:
         brique = BRC.Brique(x * 64 + self.grid_offset_x, y * 64, 64, 64, screen, self.tile_list[self.current_scroll])
         if brique not in self.briques:
             self.briques.append(brique)
+            print(brique)
+            print(self.briques)
+        else:
+            print("erreur")
 
     def DrawModeText(self, screen):
         mode_text = f'Mode draw activé'

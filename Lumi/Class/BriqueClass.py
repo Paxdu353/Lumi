@@ -42,6 +42,9 @@ class Brique:
     def colliderect(self, rect):
         return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height).colliderect(rect)
 
+    def list_info(self):
+        return [self.x_pos, self.y_pos, self.width, self.height, self.color]
+
     def __repr__(self):
         return f"{self.x_pos}, {self.y_pos}, {self.width}, {self.height}, {self.color}"
 
