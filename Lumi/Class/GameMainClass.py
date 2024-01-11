@@ -98,9 +98,10 @@ class Main:
                     item.collect(self.__player)
 
         cle = pygame.key.get_pressed()
-        self.__player.move(cle)
+        self.__player.move(cle, self.map.briques)
 
     def update_display(self):
+        print(self.map.briques)
         self.__player.update()
         for projectile in self.projectiles + self.ulti:
             projectile.move()
@@ -116,6 +117,7 @@ class Main:
                 if self.__player.scroll > 0:
                     brique.relocate(brique.x_pos + (self.speed_map * -self.__player.movement_vector),
                                     brique.y_pos)
+
 
     def draw(self):
         if self.DrawMode:

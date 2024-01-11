@@ -24,10 +24,6 @@ class Map:
         self.TiledMap(screen, size)
         self.DrawModeText(screen)
 
-    def add_brique(self, x_pos, y_pos, width, height, color=(255, 255, 255)):
-        nouvelle_brique = BRC.Brique(x_pos, y_pos, width, height, self.screen, color)
-        self.briques.append(nouvelle_brique.list_info())
-
     def update(self, player_velocity, player_movement_vector, bg_scroll):
         if bg_scroll > 0:
             self.grid_offset_x += player_velocity * -player_movement_vector
@@ -37,8 +33,6 @@ class Map:
             pygame.draw.line(screen, (255, 255, 255), (line * 64 + self.grid_offset_x, 0),
                              (line * 64 + self.grid_offset_x, 1080))
             pygame.draw.line(screen, (255, 255, 255), (0, line * 64), (size * 64 + self.grid_offset_x, line * 64))
-
-
 
     def scroll_tile(self, next_index):
         if next_index == -1 and self.current_scroll == 1:
@@ -65,6 +59,7 @@ class Map:
         for brique in self.briques:
             brique.draw(self.screen)
 
+
     def DrawRect(self, screen):
         x, y = pygame.mouse.get_pos()
         x = (x - self.grid_offset_x) // 64
@@ -72,11 +67,7 @@ class Map:
 
         brique = BRC.Brique(x * 64 + self.grid_offset_x, y * 64, 64, 64, screen, self.tile_list[self.current_scroll])
         if brique not in self.briques:
-            self.briques.append(brique)
-            print(brique)
-            print(self.briques)
-        else:
-            print("erreur")
+            self.briques.append(brique.rect)
 
     def DrawModeText(self, screen):
         mode_text = f'Mode draw activé'

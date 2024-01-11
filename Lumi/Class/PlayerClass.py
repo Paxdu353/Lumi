@@ -41,10 +41,10 @@ class Player(AC.AnimationSprite):
         if not self.is_attack and self.movement_vector == 0:
             self.images_list = AC.animations['Player']['Idle']
 
-    def move(self, cle):
+    def move(self, cle, map):
         moving = False
 
-        if cle[pygame.K_q] and cle[pygame.K_d]:
+        if (cle[pygame.K_q] and cle[pygame.K_d]) or self.box_collision.collideobjects(map):
             self.movement_vector = 0
 
 
