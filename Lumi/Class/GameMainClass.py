@@ -21,7 +21,6 @@ class Main:
         self.ulti = []
         self.items = []
         self.DrawMode = False
-        self.speed_map = 4
         self.map = MC.Map(self.__screen, 'Background_1')
         pygame.display.set_caption(self.__name)
 
@@ -57,7 +56,7 @@ class Main:
                         file.write(str(self.map.briques))
 
 
-                elif event.key == pygame.K_x:
+                elif event.key == pygame.K_x and self.DrawMode:
                     self.map.briques = []
 
 
@@ -98,10 +97,9 @@ class Main:
                     item.collect(self.__player)
 
         cle = pygame.key.get_pressed()
-        self.__player.move(cle, self.map.briques)
+        self.__player.move(cle)
 
     def update_display(self):
-        print(self.map.briques)
         self.__player.update()
         for projectile in self.projectiles + self.ulti:
             projectile.move()
@@ -115,9 +113,8 @@ class Main:
         if self.__player.movement_vector != 0:
             for brique in self.map.briques:
                 if self.__player.scroll > 0:
-                    brique.relocate(brique.x_pos + (self.speed_map * -self.__player.movement_vector),
+                    brique.relocate(brique.x_pos + (3 * -self.__player.movement_vector),
                                     brique.y_pos)
-
 
     def draw(self):
         if self.DrawMode:
@@ -125,7 +122,7 @@ class Main:
             self.map.DrawMode(self.__screen, number_of_cells)
             self.map.DrawScrollText(self.__screen)
 
-        self.map.update(self.__player.movement_vector, self.speed_map, self.__player.scroll)
+        self.map.update(self.__player.movement_vector, 3, self.__player.scroll)
 
         self.__player.draw(self.__screen)
         for item in self.items:

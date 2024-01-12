@@ -22,7 +22,7 @@ class Player(AC.AnimationSprite):
         self.velocity = 0
         self.movement_vector = 0
         self.__velocity_y = 0
-        self.__jump_height = 16
+        self.__jump_height = 13
         self.__jumps_left = 2
         self.__is_jumping = False
         self.images_list = AC.animations['Player']['Attack']
@@ -41,41 +41,41 @@ class Player(AC.AnimationSprite):
         if not self.is_attack and self.movement_vector == 0:
             self.images_list = AC.animations['Player']['Idle']
 
-    def move(self, cle, map):
+    def move(self, cle):
         moving = False
 
-        if (cle[pygame.K_q] and cle[pygame.K_d]) or self.box_collision.collideobjects(map):
+        if cle[pygame.K_q] and cle[pygame.K_d]:
             self.movement_vector = 0
 
-
-
-        elif cle[pygame.K_d]:
-
-            if self.x < 960 or self.scroll >= 3000:
-                moving = True
-                self.movement_vector = 1
-                self.look = 'RIGHT'
-                self.x += 3
-
-            else:
-                moving = True
-                self.movement_vector = 1
-                self.look = 'RIGHT'
-                self.scroll += 1
-
-
         elif cle[pygame.K_q]:
-            if self.x > 960 or self.scroll <= 0:
-                moving = True
-                self.movement_vector = -1
-                self.look = 'LEFT'
-                self.x -= 3
-
-            else:
+            if self.scroll > 0:
                 moving = True
                 self.movement_vector = -1
                 self.look = 'LEFT'
                 self.scroll -= 1
+
+            else:
+                self.x -= 3
+                self.look = 'LEFT'
+                self.scroll -= 1
+                self.movement_vector = -1
+
+
+
+
+        elif cle[pygame.K_d]:
+            if self.scroll < 2500 and self.scroll >= 960:
+                self.scroll += 1
+                self.movement_vector = 1
+                self.look = 'RIGHT'
+
+
+            else:
+                self.x += 3
+                moving = True
+                self.movement_vector = 1
+                self.look = 'RIGHT'
+
 
         else:
             self.movement_vector = 0
