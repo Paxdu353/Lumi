@@ -47,36 +47,34 @@ class Player(AC.AnimationSprite):
         if cle[pygame.K_q] and cle[pygame.K_d]:
             self.movement_vector = 0
 
-        elif cle[pygame.K_q]:
-            if self.scroll > 0:
-                moving = True
-                self.movement_vector = -1
-                self.look = 'LEFT'
-                self.scroll -= 1
-
-            else:
-                self.x -= 3
-                self.look = 'LEFT'
-                self.scroll -= 1
-                self.movement_vector = -1
-
-
-
-
         elif cle[pygame.K_d]:
-            if self.scroll < 2500 and self.scroll >= 960:
-                self.scroll += 1
-                self.movement_vector = 1
-                self.look = 'RIGHT'
-
-
-            else:
-                self.x += 3
+            if self.x < 960 or self.scroll >= 3000:
                 moving = True
                 self.movement_vector = 1
                 self.look = 'RIGHT'
+                self.x += 3
 
 
+            else:
+                moving = True
+                self.movement_vector = 1
+                self.look = 'RIGHT'
+                self.scroll += 1
+
+
+        elif cle[pygame.K_q]:
+            if self.x > 960 or self.scroll <= 0:
+                moving = True
+                self.movement_vector = -1
+                self.look = 'LEFT'
+                self.x -= 3
+
+
+            else:
+                moving = True
+                self.movement_vector = -1
+                self.look = 'LEFT'
+                self.scroll -= 1
         else:
             self.movement_vector = 0
 
