@@ -10,7 +10,8 @@ class PGCD:
         if self.b != 0:
             print(self)
         else:
-            return f"{self} = {self.solve()}"
+            print(f"{self} = {self.solve()}")
+            return
 
         while self.b != 0:
             self.a, self.b = self.b, self.a % self.b
