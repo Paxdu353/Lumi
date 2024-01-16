@@ -12,7 +12,7 @@ class Background:
 
     def draw_bg(self, screen, scroll):
         for x in range(self.loop):
-            speed = 2
+            speed = 1.3
             for i in self.background:
                 if scroll > 0:
                     screen.blit(i, ((x * self.width_background) - scroll * speed, 0))

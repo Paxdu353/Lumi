@@ -75,6 +75,7 @@ class Player(AC.AnimationSprite):
                 self.movement_vector = -1
                 self.look = 'LEFT'
                 self.scroll -= 1
+
         else:
             self.movement_vector = 0
 

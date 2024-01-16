@@ -6,6 +6,7 @@ class PGCD:
         self.b = b
     def solve(self):
         return str(math.gcd(self.a, self.b))
+
     def simplify(self):
         if self.b != 0:
             print(self)
@@ -21,9 +22,13 @@ class PGCD:
                 print(f"{self} = {self.solve()}")
                 return
 
+    def __eq__(self, other):
+        return self.solve() == other.solve()
 
     def __repr__(self):
         return f"PGCD({self.a} ; {self.b})"
+
+
 
 
 def si(a, b):
@@ -31,3 +36,6 @@ def si(a, b):
 
 def so(a, b):
     return PGCD(a, b).solve()
+
+def eq(a, b, c, d):
+    return PGCD(a, b) == PGCD(c, d)
