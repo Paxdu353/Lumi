@@ -19,6 +19,7 @@ class Brique:
     def relocate(self, x_pos, y_pos):
         self.x_pos = x_pos
         self.y_pos = y_pos
+        self.rect.x = x_pos
 
     def change(self, x_pos, y_pos, width, height):
         self.relocate(x_pos, y_pos)
@@ -48,3 +49,6 @@ class Brique:
 
     def rect_info(self):
         return pygame.rect.Rect(self.x_pos, self.y_pos, self.width, self.height)
+
+    def __repr__(self):
+        return f"[{self.x_pos}, {self.y_pos}, {self.width}, {self.height}, {self.color}]"

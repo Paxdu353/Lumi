@@ -32,3 +32,8 @@ class Projectile:
         rect.center = (self.x, self.y)
         screen.blit(self.image, rect)
 
+        check_colision = pygame.Rect(self.x - 150, self.y - 150, 300, 300)
+        rectsurf = pygame.Surface(check_colision.size, pygame.SRCALPHA)
+        rectsurf.fill((255, 100, 0, 100))
+        screen.blit(rectsurf, check_colision.topleft)
+

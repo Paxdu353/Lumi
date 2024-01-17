@@ -112,5 +112,10 @@ class Player(AC.AnimationSprite):
         screen.blit(image_to_draw, (img_x, img_y))
         self.animate()
 
+        check_colision = pygame.Rect(self.x-150, self.y-150, 300, 300)
+        rectsurf = pygame.Surface(check_colision.size, pygame.SRCALPHA)
+        rectsurf.fill((255, 100, 0, 100))
+        screen.blit(rectsurf, check_colision.topleft)
+
     def get_angle(self, x1, y1, x2, y2):
         return math.atan2(y2 - y1, x2 - x1)

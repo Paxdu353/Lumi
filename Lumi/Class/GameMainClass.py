@@ -15,6 +15,7 @@ class Main:
         self.height = height
         self.__name = name
         self.fps = fps
+        self.speed_map = 3
         self.__screen = pygame.display.set_mode((self.width, self.height))
         self.__player = PC.Player(self.width / 2, height - 118)
         self.projectiles = []
@@ -101,6 +102,7 @@ class Main:
 
     def update_display(self):
         self.__player.update()
+
         for projectile in self.projectiles + self.ulti:
             projectile.move()
             projectile.DrawMainAttack(self.__screen)
@@ -113,8 +115,7 @@ class Main:
         if self.__player.movement_vector != 0:
             for brique in self.map.briques:
                 if self.__player.scroll > 0:
-                    brique.relocate(brique.x_pos + (3 * -self.__player.movement_vector),
-                                    brique.y_pos)
+                    brique.relocate(brique.x_pos  - self.speed_map * self.__player.movement_vector, brique.y_pos)
 
     def draw(self):
         if self.DrawMode:
@@ -122,8 +123,7 @@ class Main:
             self.map.DrawMode(self.__screen, number_of_cells)
             self.map.DrawScrollText(self.__screen)
 
-        self.map.update(self.__player.movement_vector, 3, self.__player.scroll)
-
+        self.map.update(self.__player.movement_vector, self.speed_map, self.__player.scroll)
         self.__player.draw(self.__screen)
         for item in self.items:
             item.draw(self.__screen)
