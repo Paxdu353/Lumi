@@ -8,6 +8,7 @@ class Map:
     def __init__(self, screen, background_name):
         self.screen = screen
         self.briques = []
+        self.active_briques = []
         self.background = BAC.Background(background_name)
         self.grid_offset_x = 0
         self.tile_list = {
@@ -82,7 +83,7 @@ class Map:
         for brique in self.briques:
             if x_pos - 215 <= brique.x_pos <= x_pos + 150 and y_pos - 215 <= brique.y_pos <= y_pos + 150:
                 liste.append(brique)
-        return liste
+        self.active_briques = liste
 
     def DrawRect(self, screen):
         x, y = pygame.mouse.get_pos()

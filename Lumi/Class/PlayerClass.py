@@ -3,6 +3,7 @@ import math
 import pygame
 
 import Lumi.Class.AnimationClass as AC
+import Lumi.Class.BriqueClass as BC
 
 
 class Player(AC.AnimationSprite):
@@ -24,11 +25,15 @@ class Player(AC.AnimationSprite):
         self.__velocity_y = 0
         self.__jump_height = 13
         self.__jumps_left = 2
+        self.can_move = True
         self.__is_jumping = False
         self.images_list = AC.animations['Player']['Attack']
+        self.rect = None
 
 
-    def update_animation_state(self):
+
+    def update_animation_state(self, screen):
+        self.rect = BC.Brique(self.x-55, self.y-100, self.image.get_width()//2, self.image.get_height(), screen)
         if self.movement_vector != 0 and not self.is_attack:
             self.images_list = AC.animations['Player']['Walk']
 
@@ -48,24 +53,27 @@ class Player(AC.AnimationSprite):
         if cle[pygame.K_q] and cle[pygame.K_d]:
             self.movement_vector = 0
 
-        elif cle[pygame.K_d]:
+        elif cle[pygame.K_d]and self.can_move:
             if self.x < 960 or self.scroll >= 3000:
                 moving = True
                 self.movement_vector = 1
                 self.look = 'RIGHT'
                 self.x += 3
+                self.last_vector = 1
 
 
             else:
                 moving = True
                 self.movement_vector = 1
+                self.last_vector = 1
                 self.look = 'RIGHT'
                 self.scroll += 1
 
 
-        elif cle[pygame.K_q]:
+        elif cle[pygame.K_q]and self.can_move:
             if self.x > 960 or self.scroll <= 0:
                 moving = True
+                self.last_vector = -1
                 self.movement_vector = -1
                 self.look = 'LEFT'
                 self.x -= 3
@@ -86,8 +94,8 @@ class Player(AC.AnimationSprite):
             self.__velocity_y = - self.__jump_height
             self.__jumps_left -= 1
 
-    def update(self):
-        self.update_animation_state()
+    def update(self, screen):
+        self.update_animation_state(screen)
 
         if self.__is_jumping:
             self.__velocity_y += 1

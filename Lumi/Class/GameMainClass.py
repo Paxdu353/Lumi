@@ -101,7 +101,7 @@ class Main:
         self.__player.move(cle)
 
     def update_display(self):
-        self.__player.update()
+        self.__player.update(self.__screen)
 
 
         for projectile in self.projectiles + self.ulti:
@@ -114,16 +114,18 @@ class Main:
                     self.ulti.remove(projectile)
 
 
-        p_list_check_collision = self.map.get_check_collision(self.__player.x, self.__player.y)
-        if len(p_list_check_collision) != 0:
-            for i, r in enumerate(p_list_check_collision):
-                r.check_col = True
-                print(i)
+        self.map.get_check_collision(self.__player.x, self.__player.y)
+        for br in self.map.active_briques:
+            br.check_col = True
+
+            if self.__player.rect.colliderect(br.rect):
+                self.__player.can_move = False
+
 
         if self.__player.movement_vector != 0:
             for brique in self.map.briques:
                 if self.__player.scroll > 0:
-                    brique.relocate(brique.x_pos  - self.speed_map * self.__player.movement_vector, brique.y_pos)
+                    brique.relocate(brique.x_pos - self.speed_map * self.__player.movement_vector, brique.y_pos)
 
     def draw(self):
         if self.DrawMode:
@@ -136,7 +138,9 @@ class Main:
         for item in self.items:
             item.draw(self.__screen)
         self.__player.draw_ammo(self.__screen)
+        pygame.draw.rect(self.__screen, (255, 255, 255), self.__player.rect)
         pygame.display.flip()
+
 
     def run(self):
         while True:
