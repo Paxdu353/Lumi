@@ -27,6 +27,7 @@ class Player(AC.AnimationSprite):
         self.__is_jumping = False
         self.images_list = AC.animations['Player']['Attack']
 
+
     def update_animation_state(self):
         if self.movement_vector != 0 and not self.is_attack:
             self.images_list = AC.animations['Player']['Walk']
@@ -112,7 +113,7 @@ class Player(AC.AnimationSprite):
         screen.blit(image_to_draw, (img_x, img_y))
         self.animate()
 
-        check_colision = pygame.Rect(self.x-150, self.y-150, 300, 300)
+        check_colision = pygame.Rect(self.x- 150 , self.y- 150, 300, 300)
         rectsurf = pygame.Surface(check_colision.size, pygame.SRCALPHA)
         rectsurf.fill((255, 100, 0, 100))
         screen.blit(rectsurf, check_colision.topleft)

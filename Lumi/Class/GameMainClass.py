@@ -103,6 +103,7 @@ class Main:
     def update_display(self):
         self.__player.update()
 
+
         for projectile in self.projectiles + self.ulti:
             projectile.move()
             projectile.DrawMainAttack(self.__screen)
@@ -111,6 +112,13 @@ class Main:
                     self.projectiles.remove(projectile)
                 else:
                     self.ulti.remove(projectile)
+
+
+        p_list_check_collision = self.map.get_check_collision(self.__player.x, self.__player.y)
+        if len(p_list_check_collision) != 0:
+            for i, r in enumerate(p_list_check_collision):
+                r.check_col = True
+                print(i)
 
         if self.__player.movement_vector != 0:
             for brique in self.map.briques:

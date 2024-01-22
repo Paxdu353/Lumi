@@ -77,6 +77,13 @@ class Map:
         for brique in self.briques:
             brique.draw(self.screen)
 
+    def get_check_collision(self, x_pos, y_pos):
+        liste = []
+        for brique in self.briques:
+            if x_pos - 215 <= brique.x_pos <= x_pos + 150 and y_pos - 215 <= brique.y_pos <= y_pos + 150:
+                liste.append(brique)
+        return liste
+
     def DrawRect(self, screen):
         x, y = pygame.mouse.get_pos()
         x = (x - self.grid_offset_x) // 64
@@ -97,3 +104,5 @@ class Map:
         font = pygame.font.SysFont(None, 24)
         text = font.render(scroll_text, True, self.tile_list[self.current_scroll])
         screen.blit(text, (10, 40))
+
+
