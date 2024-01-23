@@ -22,6 +22,9 @@ class Player(AC.AnimationSprite):
         self.look = 'RIGHT'
         self.velocity = 0
         self.movement_vector = 0
+
+        self.vec_sup = 0
+        self.vec_last = 0
         self.__velocity_y = 0
         self.__jump_height = 13
         self.__jumps_left = 2
@@ -47,37 +50,32 @@ class Player(AC.AnimationSprite):
         if not self.is_attack and self.movement_vector == 0:
             self.images_list = AC.animations['Player']['Idle']
 
-    def move(self, cle):
+    def move(self, cle, briques):
         moving = False
-
         if cle[pygame.K_q] and cle[pygame.K_d]:
             self.movement_vector = 0
 
-        elif cle[pygame.K_d]and self.can_move:
+
+        elif cle[pygame.K_d] and self.rect.collidelist(briques):
             if self.x < 960 or self.scroll >= 3000:
                 moving = True
                 self.movement_vector = 1
                 self.look = 'RIGHT'
                 self.x += 3
-                self.last_vector = 1
-
 
             else:
                 moving = True
                 self.movement_vector = 1
-                self.last_vector = 1
                 self.look = 'RIGHT'
                 self.scroll += 1
 
 
-        elif cle[pygame.K_q]and self.can_move:
+        elif cle[pygame.K_q] and self.rect.collidelist(briques):
             if self.x > 960 or self.scroll <= 0:
                 moving = True
-                self.last_vector = -1
                 self.movement_vector = -1
                 self.look = 'LEFT'
                 self.x -= 3
-
 
             else:
                 moving = True
@@ -88,24 +86,18 @@ class Player(AC.AnimationSprite):
         else:
             self.movement_vector = 0
 
-    def jump(self):
-        if self.__jumps_left > 0:
-            self.__is_jumping = True
-            self.__velocity_y = - self.__jump_height
-            self.__jumps_left -= 1
 
-    def update(self, screen):
+    def update(self, screen, briques):
         self.update_animation_state(screen)
 
-        if self.__is_jumping:
-            self.__velocity_y += 1
-            self.y += self.__velocity_y
 
-            if self.y >= 962:
-                self.y = 962
-                self.__is_jumping = False
-                self.__velocity_y = 0
-                self.__jumps_left = 2
+    def check_collision_during_jump(self, new_y, briques):
+        future_rect = self.rect
+        future_rect.y = new_y
+        for br in briques:
+            if future_rect.colliderect(br.rect):
+                return br
+        return None
 
     def draw_ammo(self, screen):
         ammo_text = f"Bullet: {self.main_attack}, Ultimate: {self.ultime_attack}"

@@ -34,7 +34,7 @@ class Main:
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    self.__player.jump()
+                    pass
 
                 elif event.key == pygame.K_s:
                     if len(self.ulti) == 0 and len(self.projectiles) == 0 and self.__player.ultime_attack > 0:
@@ -98,10 +98,13 @@ class Main:
                     item.collect(self.__player)
 
         cle = pygame.key.get_pressed()
-        self.__player.move(cle)
+
+        self.map.get_check_collision(self.__player.x, self.__player.y)
+        self.__player.move(cle, self.map.active_briques)
 
     def update_display(self):
-        self.__player.update(self.__screen)
+        self.__player.update(self.__screen, self.map.active_briques)
+
 
 
         for projectile in self.projectiles + self.ulti:
@@ -112,15 +115,6 @@ class Main:
                     self.projectiles.remove(projectile)
                 else:
                     self.ulti.remove(projectile)
-
-
-        self.map.get_check_collision(self.__player.x, self.__player.y)
-        for br in self.map.active_briques:
-            br.check_col = True
-
-            if self.__player.rect.colliderect(br.rect):
-                self.__player.can_move = False
-
 
         if self.__player.movement_vector != 0:
             for brique in self.map.briques:
