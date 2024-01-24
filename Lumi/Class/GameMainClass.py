@@ -105,8 +105,6 @@ class Main:
     def update_display(self):
         self.__player.update(self.__screen, self.map.active_briques)
 
-
-
         for projectile in self.projectiles + self.ulti:
             projectile.move()
             projectile.DrawMainAttack(self.__screen)
@@ -132,7 +130,8 @@ class Main:
         for item in self.items:
             item.draw(self.__screen)
         self.__player.draw_ammo(self.__screen)
-        pygame.draw.rect(self.__screen, (255, 255, 255), self.__player.rect)
+        self.__player.debug_mode(self.__screen)
+        pygame.draw.rect(self.__screen, (255, 255, 255), self.__player.hitbox)
         pygame.display.flip()
 
 

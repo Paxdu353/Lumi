@@ -83,6 +83,7 @@ class Map:
         for brique in self.briques:
             if x_pos - 215 <= brique.x_pos <= x_pos + 150 and y_pos - 215 <= brique.y_pos <= y_pos + 150:
                 liste.append(brique)
+                brique.check_col = True
         self.active_briques = liste
 
     def DrawRect(self, screen):

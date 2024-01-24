@@ -22,21 +22,17 @@ class Player(AC.AnimationSprite):
         self.look = 'RIGHT'
         self.velocity = 0
         self.movement_vector = 0
-
         self.vec_sup = 0
         self.vec_last = 0
-        self.__velocity_y = 0
-        self.__jump_height = 13
-        self.__jumps_left = 2
+        self.velocity_y = 0
+        self.jumps_left = 2
         self.can_move = True
         self.__is_jumping = False
         self.images_list = AC.animations['Player']['Attack']
-        self.rect = None
-
-
+        self.hitbox = None
 
     def update_animation_state(self, screen):
-        self.rect = BC.Brique(self.x-55, self.y-100, self.image.get_width()//2, self.image.get_height(), screen)
+        self.hitbox = BC.Brique(self.x-55, self.y-100, self.image.get_width()//2, self.image.get_height(), screen)
         if self.movement_vector != 0 and not self.is_attack:
             self.images_list = AC.animations['Player']['Walk']
 
@@ -51,59 +47,81 @@ class Player(AC.AnimationSprite):
             self.images_list = AC.animations['Player']['Idle']
 
     def move(self, cle, briques):
-        moving = False
+
         if cle[pygame.K_q] and cle[pygame.K_d]:
             self.movement_vector = 0
 
 
-        elif cle[pygame.K_d] and self.rect.collidelist(briques):
-            if self.x < 960 or self.scroll >= 3000:
-                moving = True
-                self.movement_vector = 1
-                self.look = 'RIGHT'
-                self.x += 3
-
-            else:
-                moving = True
-                self.movement_vector = 1
-                self.look = 'RIGHT'
-                self.scroll += 1
-
-
-        elif cle[pygame.K_q] and self.rect.collidelist(briques):
-            if self.x > 960 or self.scroll <= 0:
-                moving = True
-                self.movement_vector = -1
-                self.look = 'LEFT'
+        elif cle[pygame.K_d]:
+            self.x += 3
+            self.hitbox.x_pos += 3
+            if self.hitbox != None and self.hitbox.collide(briques):
                 self.x -= 3
-
+                self.hitbox.x_pos -= 3
+                self.movement_vector = 0
             else:
-                moving = True
-                self.movement_vector = -1
-                self.look = 'LEFT'
-                self.scroll -= 1
+                self.x -= 3
+                self.hitbox.x_pos -= 3
+                if self.x < 960 or self.scroll >= 3000:
+                    self.movement_vector = 1
+                    self.look = 'RIGHT'
+                    self.x += 3
+                else:
+                    self.look = 'RIGHT'
+                    self.scroll += 1
+                    self.movement_vector = 1
+
+
+        elif cle[pygame.K_q]:
+            self.x -= 3
+            self.hitbox.x_pos -= 3
+            if self.hitbox != None and self.hitbox.collide(briques):
+                self.x += 3
+                self.hitbox.x_pos += 3
+                self.movement_vector = 0
+            else:
+                self.x += 3
+                self.hitbox.x_pos += 3
+                if self.x > 960 or self.scroll <= 0:
+                    self.movement_vector = -1
+                    self.look = 'LEFT'
+                    self.x -= 3
+
+                else:
+                    self.look = 'LEFT'
+                    self.scroll -= 1
+                    self.movement_vector = -1
 
         else:
             self.movement_vector = 0
+
 
 
     def update(self, screen, briques):
         self.update_animation_state(screen)
 
 
-    def check_collision_during_jump(self, new_y, briques):
-        future_rect = self.rect
-        future_rect.y = new_y
-        for br in briques:
-            if future_rect.colliderect(br.rect):
-                return br
-        return None
-
     def draw_ammo(self, screen):
         ammo_text = f"Bullet: {self.main_attack}, Ultimate: {self.ultime_attack}"
         font = pygame.font.SysFont(None, 24)
         text = font.render(ammo_text, True, (255, 255, 255))
         screen.blit(text, (10, 10))
+
+
+    def debug_mode(self, screen):
+        co_text = f"X: {self.x}, Y: {self.y}"
+        vec_text = f"Vector X: {self.movement_vector}, Vector Y: {self.velocity_y}"
+        scroll_text = f"Scroll: {self.scroll}"
+        font = pygame.font.SysFont(None, 24)
+
+        text_1 = font.render(co_text, True, (255, 255, 255))
+        text_2 = font.render(vec_text, True, (255, 255, 255))
+        text_3 = font.render(scroll_text, True, (255, 255, 255))
+
+        screen.blit(text_1, (10, 60))
+        screen.blit(text_2, (10, 84))
+        screen.blit(text_3, (10, 108))
+
 
     def draw(self, screen):
         img_width, img_height = self.image.get_width(), self.image.get_height()
