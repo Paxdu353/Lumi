@@ -25,7 +25,9 @@ class Player(AC.AnimationSprite):
         self.vec_sup = 0
         self.vec_last = 0
         self.velocity_y = 0
+        self.gravity = 0.5
         self.jumps_left = 2
+        self.jump_speed = -10
         self.can_move = True
         self.__is_jumping = False
         self.images_list = AC.animations['Player']['Attack']
@@ -45,6 +47,38 @@ class Player(AC.AnimationSprite):
 
         if not self.is_attack and self.movement_vector == 0:
             self.images_list = AC.animations['Player']['Idle']
+
+    def apply_gravity(self):
+        self.velocity_y += self.gravity
+        if self.y + self.height + self.velocity_y > 962:
+            self.velocity_y = 0
+            self.y = 962 - self.height
+            if self.jumps_left != 2:
+                self.jumps_left = 2
+        else:
+            self.y += self.velocity_y
+
+
+
+    def check_vertical_collision(self, briques):
+        self.apply_gravity()
+        for brique in briques:
+            if brique.y_pos < self.hitbox.y_pos:
+                if self.hitbox != None and self.hitbox.colliderect(brique):
+                    self.velocity_y = 0
+                    self.y = brique.bottom() + (self.image.get_height() // 2)
+                    break
+
+            elif brique.y_pos > self.hitbox.y_pos:
+                if self.hitbox != None and self.hitbox.colliderect(brique):
+                    self.velocity_y = 0
+                    self.y = brique.top() - (self.image.get_height() // 2)
+                    break
+
+    def jump(self):
+        if self.jumps_left > 0:
+            self.velocity_y = self.jump_speed
+            self.jumps_left -= 1
 
     def move(self, cle, briques):
 
@@ -99,6 +133,7 @@ class Player(AC.AnimationSprite):
 
     def update(self, screen, briques):
         self.update_animation_state(screen)
+        self.check_vertical_collision(briques)
 
 
     def draw_ammo(self, screen):
@@ -109,18 +144,22 @@ class Player(AC.AnimationSprite):
 
 
     def debug_mode(self, screen):
+        x, y = pygame.mouse.get_pos()
         co_text = f"X: {self.x}, Y: {self.y}"
         vec_text = f"Vector X: {self.movement_vector}, Vector Y: {self.velocity_y}"
         scroll_text = f"Scroll: {self.scroll}"
+        mouse_text = f"Souris X: {x}, Souris Y: {y}"
         font = pygame.font.SysFont(None, 24)
 
         text_1 = font.render(co_text, True, (255, 255, 255))
         text_2 = font.render(vec_text, True, (255, 255, 255))
         text_3 = font.render(scroll_text, True, (255, 255, 255))
+        text_4 = font.render(mouse_text, True, (255, 255, 255))
 
         screen.blit(text_1, (10, 60))
         screen.blit(text_2, (10, 84))
         screen.blit(text_3, (10, 108))
+        screen.blit(text_4, (10, 132))
 
 
     def draw(self, screen):

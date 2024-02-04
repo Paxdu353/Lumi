@@ -43,24 +43,32 @@ class Brique:
                 pygame.draw.rect(screen, (0, 255, 0), self.rect)
                 self.check_col = False
 
+
+    def rect_info(self):
+        return pygame.rect.Rect(self.x_pos, self.y_pos, self.width, self.height)
+
     def collidepoint(self, x, y):
-        return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height).collidepoint(x, y)
+        return self.rect_info().collidepoint(x, y)
 
     def colliderect(self, rect):
-        return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height).colliderect(rect)
+        return self.rect_info().colliderect(rect)
 
     def collide(self, rects):
-        return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height).collidelist(rects) != -1
-
+        return self.rect_info().collidelist(rects) != -1
 
     def list_info(self):
         return [self.x_pos, self.y_pos, self.width, self.height, self.color]
 
     def copy(self):
-        return pygame.rect.Rect(self.x_pos, self.y_pos, self.width, self.height).copy()
+        return self.rect_info().copy()
 
-    def rect_info(self):
-        return pygame.rect.Rect(self.x_pos, self.y_pos, self.width, self.height)
+
+
+    def bottom(self):
+        return self.rect_info().bottom
+
+    def top(self):
+        return self.rect_info().top
 
     def __repr__(self):
         return f"[{self.x_pos}, {self.y_pos}, {self.width}, {self.height}, {self.color}]"

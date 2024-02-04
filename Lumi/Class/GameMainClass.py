@@ -34,7 +34,7 @@ class Main:
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    pass
+                    self.__player.jump()
 
                 elif event.key == pygame.K_s:
                     if len(self.ulti) == 0 and len(self.projectiles) == 0 and self.__player.ultime_attack > 0:
