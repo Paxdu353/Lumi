@@ -32,6 +32,7 @@ class Player(AC.AnimationSprite):
         self.__is_jumping = False
         self.images_list = AC.animations['Player']['Attack']
         self.hitbox = None
+        self.bottom_collide = False
 
     def update_animation_state(self, screen):
         self.hitbox = BC.Brique(self.x-55, self.y-100, self.image.get_width()//2, self.image.get_height(), screen)
@@ -53,8 +54,7 @@ class Player(AC.AnimationSprite):
         if self.y + self.height + self.velocity_y > 962:
             self.velocity_y = 0
             self.y = 962 - self.height
-            if self.jumps_left != 2:
-                self.jumps_left = 2
+            self.jumps_left = 2
         else:
             self.y += self.velocity_y
 
@@ -69,11 +69,17 @@ class Player(AC.AnimationSprite):
                     self.y = brique.bottom() + (self.image.get_height() // 2)
                     break
 
-            elif brique.y_pos > self.hitbox.y_pos:
+            elif brique.y_pos > self.hitbox.y_pos and self.velocity_y > 0:
+                self.hitbox.y_pos += 1
                 if self.hitbox != None and self.hitbox.colliderect(brique):
                     self.velocity_y = 0
                     self.y = brique.top() - (self.image.get_height() // 2)
+                    self.jumps_left = 2
+                    self.hitbox.y_pos -= 1
                     break
+
+                self.hitbox.y_pos -= 1
+
 
     def jump(self):
         if self.jumps_left > 0:
@@ -149,17 +155,20 @@ class Player(AC.AnimationSprite):
         vec_text = f"Vector X: {self.movement_vector}, Vector Y: {self.velocity_y}"
         scroll_text = f"Scroll: {self.scroll}"
         mouse_text = f"Souris X: {x}, Souris Y: {y}"
+        jump_text = f"Jump: {self.jumps_left}"
         font = pygame.font.SysFont(None, 24)
 
         text_1 = font.render(co_text, True, (255, 255, 255))
         text_2 = font.render(vec_text, True, (255, 255, 255))
         text_3 = font.render(scroll_text, True, (255, 255, 255))
         text_4 = font.render(mouse_text, True, (255, 255, 255))
+        text_5 = font.render(jump_text, True, (255, 255, 255))
 
         screen.blit(text_1, (10, 60))
         screen.blit(text_2, (10, 84))
         screen.blit(text_3, (10, 108))
         screen.blit(text_4, (10, 132))
+        screen.blit(text_5, (10, 156))
 
 
     def draw(self, screen):

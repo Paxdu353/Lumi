@@ -126,12 +126,13 @@ class Main:
             self.map.DrawScrollText(self.__screen)
 
         self.map.update(self.__player.movement_vector, self.speed_map, self.__player.scroll)
+        pygame.draw.rect(self.__screen, (255, 255, 255), self.__player.hitbox)
         self.__player.draw(self.__screen)
         for item in self.items:
             item.draw(self.__screen)
         self.__player.draw_ammo(self.__screen)
         self.__player.debug_mode(self.__screen)
-        pygame.draw.rect(self.__screen, (255, 255, 255), self.__player.hitbox)
+
         pygame.display.flip()
 
 
