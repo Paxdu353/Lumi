@@ -3,8 +3,10 @@ import pygame
 import Lumi.Class.MapClass as MC
 import Lumi.Class.PlayerClass as PC
 import Lumi.Class.ProjectileClass as PCP
+import Lumi.Class.BriqueClass as BC
 
 pygame.init()
+
 
 
 class Main:
@@ -22,8 +24,98 @@ class Main:
         self.ulti = []
         self.items = []
         self.DrawMode = False
+        self.MainMenu = True
+        self.SettingsMenu = False
         self.map = MC.Map(self.__screen, 'Background_1')
+        self.Menu = pygame.transform.scale(pygame.image.load(f'images/Gui/MainMenu/Background/img.png').convert_alpha(), (1920, 1080))
+        self.sound = pygame.mixer.Sound(f'images/main.mp3')
+
         pygame.display.set_caption(self.__name)
+
+
+
+    def DrawGui(self):
+
+        play_button = BC.Brique(670, 590, 250, 90, self.__screen)
+        quit_button = BC.Brique(805, 740, 320, 80, self.__screen)
+        reglage_button = BC.Brique(1010, 590, 375, 90, self.__screen)
+
+
+        if self.sound.get_num_channels() == 0:
+            self.sound.set_volume(0.1)
+            self.sound.play()
+
+
+        blackanim = pygame.Rect(0, 0, 1920, 1080)
+        rectsurf = pygame.Surface(blackanim.size, pygame.SRCALPHA)
+        rectsurf.fill((255, 100, 0, 0))
+
+
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    exit()
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    x, y = pygame.mouse.get_pos()
+                    if not self.SettingsMenu:
+                        if play_button.collidepoint(x, y):
+                            self.MainMenu = False
+                            self.sound.stop()
+
+                        elif quit_button.collidepoint(x, y):
+                            pygame.quit()
+                            exit()
+
+                        elif reglage_button.collidepoint(x, y):
+                            self.SettingsMenu = True
+
+                    else:
+                        pass
+
+
+
+        self.__screen.blit(self.Menu, (0, 0))
+
+        if not self.SettingsMenu:
+            name_text = f"LUMI"
+            play_text = f"JOUER - REGLAGE"
+            quit_text = f"QUITTER"
+            font = pygame.font.Font("images/font.ttf", 100)
+            font2 = pygame.font.Font("images/font.ttf", 50)
+            font3 = pygame.font.Font("images/font.ttf", 250)
+
+            text0 = font3.render(name_text, True, (184, 7, 75))
+            text1 = font.render(play_text, True, (184, 7, 75))
+            text2 = font.render(quit_text, True, (184, 7, 75))
+
+
+
+            self.__screen.blit(text0, (700, 0))
+            self.__screen.blit(text1, (665, 550))
+            self.__screen.blit(text2, (800, 700))
+            self.__screen.blit(rectsurf, blackanim)
+            #pygame.draw.rect(self.__screen, (255, 255, 255), play_button)
+            #pygame.draw.rect(self.__screen, (255, 255, 255), quit_button)
+            #pygame.draw.rect(self.__screen, (255, 255, 255), reglage_button)
+
+
+        else:
+            retour_text = f"RETOUR"
+            font2 = pygame.font.Font("images/font.ttf", 50)
+            text2 = font2.render(retour_text, True, (184, 7, 75))
+            self.__screen.blit(text2, (700, 500))
+            pygame.draw.rect(self.__screen, (255, 255, 255), text2.get_rect())
+
+        pygame.display.update()
+
 
     def main_events(self):
         self.map.draw(self.__player.scroll)
@@ -62,8 +154,7 @@ class Main:
 
 
                 elif event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    exit()
+                    self.MainMenu = True
 
 
 
@@ -100,6 +191,7 @@ class Main:
         cle = pygame.key.get_pressed()
 
         self.map.get_check_collision(self.__player.x, self.__player.y)
+
         self.__player.move(cle, self.map.active_briques)
 
     def update_display(self):
@@ -107,12 +199,25 @@ class Main:
 
         for projectile in self.projectiles + self.ulti:
             projectile.move()
+            projectile.update(self.__screen)
             projectile.DrawMainAttack(self.__screen)
+            self.map.get_check_collision(projectile.x, projectile.y)
             if projectile.x < 0 or projectile.x > self.width or projectile.y < 0 or projectile.y > self.height:
                 if projectile in self.projectiles:
                     self.projectiles.remove(projectile)
                 else:
                     self.ulti.remove(projectile)
+
+            else:
+                for brique in self.map.active_briques:
+                    if projectile.hitbox.colliderect(brique):
+                        if projectile in self.projectiles:
+                            self.projectiles.remove(projectile)
+                            break
+                        else:
+                            self.ulti.remove(projectile)
+                            break
+
 
         if self.__player.movement_vector != 0:
             for brique in self.map.briques:
@@ -126,7 +231,7 @@ class Main:
             self.map.DrawScrollText(self.__screen)
 
         self.map.update(self.__player.movement_vector, self.speed_map, self.__player.scroll)
-        pygame.draw.rect(self.__screen, (255, 255, 255), self.__player.hitbox)
+        #pygame.draw.rect(self.__screen, (255, 255, 255), self.__player.hitbox)
         self.__player.draw(self.__screen)
         for item in self.items:
             item.draw(self.__screen)
@@ -138,7 +243,11 @@ class Main:
 
     def run(self):
         while True:
-            self.main_events()
-            self.update_display()
-            self.draw()
+            if self.MainMenu:
+                self.DrawGui()
+            else:
+                self.main_events()
+                self.update_display()
+                self.draw()
+
             self.clock.tick(self.fps)

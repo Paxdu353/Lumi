@@ -35,7 +35,7 @@ class Player(AC.AnimationSprite):
         self.bottom_collide = False
 
     def update_animation_state(self, screen):
-        self.hitbox = BC.Brique(self.x-55, self.y-100, self.image.get_width()//2, self.image.get_height(), screen)
+        self.hitbox = BC.Brique(self.x-50, self.y-95, (self.image.get_width()//2) - 30, (self.image.get_height()//2) + 50, screen)
         if self.movement_vector != 0 and not self.is_attack:
             self.images_list = AC.animations['Player']['Walk']
 
@@ -51,9 +51,9 @@ class Player(AC.AnimationSprite):
 
     def apply_gravity(self):
         self.velocity_y += self.gravity
-        if self.y + self.height + self.velocity_y > 962:
+        if self.y + self.height + self.velocity_y > 975:
             self.velocity_y = 0
-            self.y = 962 - self.height
+            self.y = 975 - self.height
             self.jumps_left = 2
         else:
             self.y += self.velocity_y
@@ -73,7 +73,7 @@ class Player(AC.AnimationSprite):
                 self.hitbox.y_pos += 1
                 if self.hitbox != None and self.hitbox.colliderect(brique):
                     self.velocity_y = 0
-                    self.y = brique.top() - (self.image.get_height() // 2)
+                    self.y = brique.top() - ((self.image.get_height() // 2) - 45)
                     self.jumps_left = 2
                     self.hitbox.y_pos -= 1
                     break
@@ -179,10 +179,10 @@ class Player(AC.AnimationSprite):
         screen.blit(image_to_draw, (img_x, img_y))
         self.animate()
 
-        check_colision = pygame.Rect(self.x- 150 , self.y- 150, 300, 300)
+        '''check_colision = pygame.Rect(self.x- 150 , self.y- 150, 300, 300)
         rectsurf = pygame.Surface(check_colision.size, pygame.SRCALPHA)
         rectsurf.fill((255, 100, 0, 100))
-        screen.blit(rectsurf, check_colision.topleft)
+        screen.blit(rectsurf, check_colision.topleft)'''
 
     def get_angle(self, x1, y1, x2, y2):
         return math.atan2(y2 - y1, x2 - x1)
