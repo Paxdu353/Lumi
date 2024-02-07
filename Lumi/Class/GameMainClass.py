@@ -4,6 +4,7 @@ import Lumi.Class.MapClass as MC
 import Lumi.Class.PlayerClass as PC
 import Lumi.Class.ProjectileClass as PCP
 import Lumi.Class.BriqueClass as BC
+import Lumi.Class.ButtonClass as BUC
 
 pygame.init()
 
@@ -26,6 +27,7 @@ class Main:
         self.DrawMode = False
         self.MainMenu = True
         self.SettingsMenu = False
+        self.enter = False
         self.map = MC.Map(self.__screen, 'Background_1')
         self.Menu = pygame.transform.scale(pygame.image.load(f'images/Gui/MainMenu/Background/img.png').convert_alpha(), (1920, 1080))
         self.sound = pygame.mixer.Sound(f'images/main.mp3')
@@ -36,9 +38,16 @@ class Main:
 
     def DrawGui(self):
 
-        play_button = BC.Brique(670, 590, 250, 90, self.__screen)
-        quit_button = BC.Brique(805, 740, 320, 80, self.__screen)
-        reglage_button = BC.Brique(1010, 590, 375, 90, self.__screen)
+        name = BUC.Button(710, 0, 'LUMI', (184, 7, 75), 250)
+        jouer = BUC.Button(650, 500, 'JOUER', (184, 7, 75), 100)
+        reglage = BUC.Button(1000, 500, 'REGLAGE', (184, 7, 75), 100)
+        quitter = BUC.Button(810, 700, 'QUITTER', (184, 7, 75), 100)
+
+        retour = BUC.Button(25, 0, 'RETOUR', (184, 7, 75), 75)
+        audio = BUC.Button(500, 0, 'AUDIO', (184, 7, 75), 75)
+        controle = BUC.Button(800, 0, 'CONTROLE', (184, 7, 75), 75)
+        video = BUC.Button(1275, 0, 'VIDEO', (184, 7, 75), 75)
+
 
 
         if self.sound.get_num_channels() == 0:
@@ -48,7 +57,7 @@ class Main:
 
         blackanim = pygame.Rect(0, 0, 1920, 1080)
         rectsurf = pygame.Surface(blackanim.size, pygame.SRCALPHA)
-        rectsurf.fill((255, 100, 0, 0))
+
 
 
 
@@ -66,53 +75,46 @@ class Main:
                 if event.button == 1:
                     x, y = pygame.mouse.get_pos()
                     if not self.SettingsMenu:
-                        if play_button.collidepoint(x, y):
+                        if jouer.rect.collidepoint(x, y):
                             self.MainMenu = False
+                            self.enter = True
                             self.sound.stop()
-
-                        elif quit_button.collidepoint(x, y):
+                        elif quitter.rect.collidepoint(x, y):
+                            for i in range(0, 255, 2):
+                                rectsurf.fill((0, 0, 0, i))
+                                self.__screen.blit(rectsurf, (0,0))
+                                pygame.time.wait(6)
+                                pygame.display.update()
                             pygame.quit()
                             exit()
 
-                        elif reglage_button.collidepoint(x, y):
+                        elif reglage.rect.collidepoint(x, y):
                             self.SettingsMenu = True
 
                     else:
-                        pass
-
-
+                        if retour.rect.collidepoint(x, y):
+                            self.SettingsMenu = False
 
         self.__screen.blit(self.Menu, (0, 0))
 
         if not self.SettingsMenu:
-            name_text = f"LUMI"
-            play_text = f"JOUER - REGLAGE"
-            quit_text = f"QUITTER"
-            font = pygame.font.Font("images/font.ttf", 100)
-            font2 = pygame.font.Font("images/font.ttf", 50)
-            font3 = pygame.font.Font("images/font.ttf", 250)
-
-            text0 = font3.render(name_text, True, (184, 7, 75))
-            text1 = font.render(play_text, True, (184, 7, 75))
-            text2 = font.render(quit_text, True, (184, 7, 75))
-
-
-
-            self.__screen.blit(text0, (700, 0))
-            self.__screen.blit(text1, (665, 550))
-            self.__screen.blit(text2, (800, 700))
-            self.__screen.blit(rectsurf, blackanim)
-            #pygame.draw.rect(self.__screen, (255, 255, 255), play_button)
-            #pygame.draw.rect(self.__screen, (255, 255, 255), quit_button)
-            #pygame.draw.rect(self.__screen, (255, 255, 255), reglage_button)
-
+            name.draw_text(self.__screen)
+            jouer.draw_text(self.__screen)
+            reglage.draw_text(self.__screen)
+            quitter.draw_text(self.__screen)
 
         else:
-            retour_text = f"RETOUR"
-            font2 = pygame.font.Font("images/font.ttf", 50)
-            text2 = font2.render(retour_text, True, (184, 7, 75))
-            self.__screen.blit(text2, (700, 500))
-            pygame.draw.rect(self.__screen, (255, 255, 255), text2.get_rect())
+            audio.draw_text(self.__screen)
+            retour.draw_text(self.__screen)
+            controle.draw_text(self.__screen)
+            video.draw_text(self.__screen)
+
+        if self.enter:
+            for i in range(1, 255):
+                rectsurf.fill((0, 0, 0, i))
+                self.__screen.blit(rectsurf, (0, 0))
+                pygame.display.update()
+            self.enter = False
 
         pygame.display.update()
 
