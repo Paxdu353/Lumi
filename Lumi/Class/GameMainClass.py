@@ -27,6 +27,9 @@ class Main:
         self.DrawMode = False
         self.MainMenu = True
         self.SettingsMenu = False
+        self.AudioMenu = False
+        self.VideoMenu = False
+        self.ControlerMenu = False
         self.enter = False
         self.map = MC.Map(self.__screen, 'Background_1')
         self.Menu = pygame.transform.scale(pygame.image.load(f'images/Gui/MainMenu/Background/img.png').convert_alpha(), (1920, 1080))
@@ -45,8 +48,9 @@ class Main:
 
         retour = BUC.Button(25, 0, 'RETOUR', (184, 7, 75), 75)
         audio = BUC.Button(500, 0, 'AUDIO', (184, 7, 75), 75)
-        controle = BUC.Button(800, 0, 'CONTROLE', (184, 7, 75), 75)
+        controle = BUC.Button(825, 0, 'CONTROLE', (184, 7, 75), 75)
         video = BUC.Button(1275, 0, 'VIDEO', (184, 7, 75), 75)
+
 
 
 
@@ -58,8 +62,14 @@ class Main:
         blackanim = pygame.Rect(0, 0, 1920, 1080)
         rectsurf = pygame.Surface(blackanim.size, pygame.SRCALPHA)
 
-
-
+        x, y = pygame.mouse.get_pos()
+        jouer.check_colision(x, y)
+        reglage.check_colision(x, y)
+        quitter.check_colision(x, y)
+        retour.check_colision(x, y)
+        audio.check_colision(x, y)
+        controle.check_colision(x, y)
+        video.check_colision(x, y)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -94,8 +104,16 @@ class Main:
                     else:
                         if retour.rect.collidepoint(x, y):
                             self.SettingsMenu = False
+                        elif audio.rect.collidepoint(x, y):
+                            pass
+                        elif controle.rect.collidepoint(x, y):
+                            pass
+                        elif video.rect.collidepoint(x, y):
+                            pass
 
         self.__screen.blit(self.Menu, (0, 0))
+
+
 
         if not self.SettingsMenu:
             name.draw_text(self.__screen)
@@ -110,9 +128,10 @@ class Main:
             video.draw_text(self.__screen)
 
         if self.enter:
-            for i in range(1, 255):
+            for i in range(0, 255, 2):
                 rectsurf.fill((0, 0, 0, i))
                 self.__screen.blit(rectsurf, (0, 0))
+                pygame.time.wait(6)
                 pygame.display.update()
             self.enter = False
 

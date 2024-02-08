@@ -21,6 +21,11 @@ class Button:
     def change_text(self, new_text: str):
         self.text = new_text
 
+    def check_colision(self, x, y):
+        if self.rect.collidepoint(x, y):
+            self.color = (105, 4, 43)
+
+
     def draw_text(self, screen):
         screen.blit(self.render(), (self.x, self.y))
 
