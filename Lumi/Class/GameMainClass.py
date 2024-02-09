@@ -5,6 +5,7 @@ import Lumi.Class.PlayerClass as PC
 import Lumi.Class.ProjectileClass as PCP
 import Lumi.Class.BriqueClass as BC
 import Lumi.Class.ButtonClass as BUC
+from Lumi.settings import *
 
 pygame.init()
 
@@ -41,6 +42,7 @@ class Main:
 
     def DrawGui(self):
 
+
         name = BUC.Button(710, 0, 'LUMI', (184, 7, 75), 250)
         jouer = BUC.Button(650, 500, 'JOUER', (184, 7, 75), 100)
         reglage = BUC.Button(1000, 500, 'REGLAGE', (184, 7, 75), 100)
@@ -52,17 +54,17 @@ class Main:
         video = BUC.Button(1275, 0, 'VIDEO', (184, 7, 75), 75)
 
         jouabilite = BUC.Button(100, 200, 'JOUABILITE:', (184, 7, 75), 75)
-        droite = BUC.Button(200, 350, 'DROITE', (184, 7, 75), 50)
-        gauche = BUC.Button(200, 450, 'GAUCHE', (184, 7, 75), 50)
-        sauter = BUC.Button(200, 550, 'SAUTER', (184, 7, 75), 50)
-        tirer = BUC.Button(200, 650, 'TIRER', (184, 7, 75), 50)
-        special = BUC.Button(200, 750, 'ULTIME', (184, 7, 75), 50)
+        droite = BUC.Button(200, 350, f'DROITE: {valeur_control("DROITE")}', (184, 7, 75), 50)
+        gauche = BUC.Button(200, 450, f'GAUCHE: {valeur_control("GAUCHE")}', (184, 7, 75), 50)
+        sauter = BUC.Button(200, 550, f'SAUTER: {valeur_control("SAUTER")}', (184, 7, 75), 50)
+        tirer = BUC.Button(200, 650, f'TIRER', (184, 7, 75), 50)
+        special = BUC.Button(200, 750, f'ULTIME: {valeur_control("ULTIME")}', (184, 7, 75), 50)
 
         construction = BUC.Button(600, 200, 'CONSTRUCTION:', (184, 7, 75), 75)
-        vider= BUC.Button(600, 350, 'VIDER', (184, 7, 75), 50)
-        poser = BUC.Button(600, 450, 'POSER', (184, 7, 75), 50)
-        supprimer = BUC.Button(600, 550, 'SUPPRIMER', (184, 7, 75), 50)
-        sauvegarder = BUC.Button(600, 650, 'SAUVEGARDER', (184, 7, 75), 50)
+        vider= BUC.Button(750, 350, 'VIDER', (184, 7, 75), 50)
+        poser = BUC.Button(750, 450, 'POSER', (184, 7, 75), 50)
+        supprimer = BUC.Button(750, 550, 'SUPPRIMER', (184, 7, 75), 50)
+        sauvegarder = BUC.Button(750, 650, 'SAUVEGARDER', (184, 7, 75), 50)
 
 
 
