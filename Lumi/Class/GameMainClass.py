@@ -51,6 +51,20 @@ class Main:
         controle = BUC.Button(825, 0, 'CONTROLE', (184, 7, 75), 75)
         video = BUC.Button(1275, 0, 'VIDEO', (184, 7, 75), 75)
 
+        jouabilite = BUC.Button(100, 200, 'JOUABILITE:', (184, 7, 75), 75)
+        droite = BUC.Button(200, 350, 'DROITE', (184, 7, 75), 50)
+        gauche = BUC.Button(200, 450, 'GAUCHE', (184, 7, 75), 50)
+        sauter = BUC.Button(200, 550, 'SAUTER', (184, 7, 75), 50)
+        tirer = BUC.Button(200, 650, 'TIRER', (184, 7, 75), 50)
+        special = BUC.Button(200, 750, 'ULTIME', (184, 7, 75), 50)
+
+        construction = BUC.Button(600, 200, 'CONSTRUCTION:', (184, 7, 75), 75)
+        vider= BUC.Button(600, 350, 'VIDER', (184, 7, 75), 50)
+        poser = BUC.Button(600, 450, 'POSER', (184, 7, 75), 50)
+        supprimer = BUC.Button(600, 550, 'SUPPRIMER', (184, 7, 75), 50)
+        sauvegarder = BUC.Button(600, 650, 'SAUVEGARDER', (184, 7, 75), 50)
+
+
 
 
 
@@ -107,7 +121,7 @@ class Main:
                         elif audio.rect.collidepoint(x, y):
                             pass
                         elif controle.rect.collidepoint(x, y):
-                            pass
+                            self.ControlerMenu = True
                         elif video.rect.collidepoint(x, y):
                             pass
 
@@ -127,6 +141,7 @@ class Main:
             controle.draw_text(self.__screen)
             video.draw_text(self.__screen)
 
+
         if self.enter:
             for i in range(0, 255, 2):
                 rectsurf.fill((0, 0, 0, i))
@@ -134,6 +149,22 @@ class Main:
                 pygame.time.wait(6)
                 pygame.display.update()
             self.enter = False
+
+        if self.ControlerMenu:
+            gauche.draw_text(self.__screen)
+            droite.draw_text(self.__screen)
+            tirer.draw_text(self.__screen)
+            sauter.draw_text(self.__screen)
+            special.draw_text(self.__screen)
+            jouabilite.draw_text(self.__screen)
+
+
+            construction.draw_text(self.__screen)
+            poser.draw_text(self.__screen)
+            supprimer.draw_text(self.__screen)
+            sauvegarder.draw_text(self.__screen)
+            vider.draw_text(self.__screen)
+
 
         pygame.display.update()
 
