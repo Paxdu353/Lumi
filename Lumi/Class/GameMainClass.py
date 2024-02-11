@@ -66,6 +66,8 @@ class Main:
         supprimer = BUC.Button(750, 550, 'SUPPRIMER', (184, 7, 75), 50)
         sauvegarder = BUC.Button(750, 650, 'SAUVEGARDER', (184, 7, 75), 50)
 
+        controle_list = [droite, gauche, sauter, tirer, special, vider, poser, supprimer, sauvegarder]
+
 
 
 
@@ -87,15 +89,49 @@ class Main:
         controle.check_colision(x, y)
         video.check_colision(x, y)
 
+        self.__screen.blit(self.Menu, (0, 0))
+
+        if not self.SettingsMenu:
+            name.draw_text(self.__screen)
+            jouer.draw_text(self.__screen)
+            reglage.draw_text(self.__screen)
+            quitter.draw_text(self.__screen)
+
+        else:
+            audio.draw_text(self.__screen)
+            retour.draw_text(self.__screen)
+            controle.draw_text(self.__screen)
+            video.draw_text(self.__screen)
+
+        if self.enter:
+            for i in range(0, 255, 2):
+                rectsurf.fill((0, 0, 0, i))
+                self.__screen.blit(rectsurf, (0, 0))
+                pygame.time.wait(6)
+                pygame.display.update()
+            self.enter = False
+
+        if self.ControlerMenu:
+            gauche.draw_text(self.__screen)
+            droite.draw_text(self.__screen)
+            tirer.draw_text(self.__screen)
+            sauter.draw_text(self.__screen)
+            special.draw_text(self.__screen)
+            jouabilite.draw_text(self.__screen)
+
+            construction.draw_text(self.__screen)
+            poser.draw_text(self.__screen)
+            supprimer.draw_text(self.__screen)
+            sauvegarder.draw_text(self.__screen)
+            vider.draw_text(self.__screen)
+
+
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
 
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    exit()
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -120,6 +156,7 @@ class Main:
                     else:
                         if retour.rect.collidepoint(x, y):
                             self.SettingsMenu = False
+                            self.ControlerMenu = False
                         elif audio.rect.collidepoint(x, y):
                             pass
                         elif controle.rect.collidepoint(x, y):
@@ -127,45 +164,32 @@ class Main:
                         elif video.rect.collidepoint(x, y):
                             pass
 
-        self.__screen.blit(self.Menu, (0, 0))
+                        if self.ControlerMenu:
+                            for elem in controle_list:
+                                if elem.rect.collidepoint(x, y):
+                                    elem.text = elem.text.split(":")[0] + ": "
+                                    pygame.display.update()
+
+                                    waiting_for_key = True
+                                    while waiting_for_key:
+                                        for event in pygame.event.get():
+                                            if event.type == pygame.QUIT:
+                                                waiting_for_key = False
+
+                                            elif event.type == pygame.KEYDOWN:
+                                                if event.key == pygame.K_ESCAPE:
+                                                    waiting_for_key = False
+                                                    break
+
+                                                elif not event.key in ControlSettings.values():
+                                                    control_name = elem.text.split(':')[0].strip()
+                                                    ControlSettings[control_name] = event.key
+                                                    elem.text = f"{control_name}: {pygame.key.name(event.key)}"
+                                                    waiting_for_key = False
+                                                    break
 
 
 
-        if not self.SettingsMenu:
-            name.draw_text(self.__screen)
-            jouer.draw_text(self.__screen)
-            reglage.draw_text(self.__screen)
-            quitter.draw_text(self.__screen)
-
-        else:
-            audio.draw_text(self.__screen)
-            retour.draw_text(self.__screen)
-            controle.draw_text(self.__screen)
-            video.draw_text(self.__screen)
-
-
-        if self.enter:
-            for i in range(0, 255, 2):
-                rectsurf.fill((0, 0, 0, i))
-                self.__screen.blit(rectsurf, (0, 0))
-                pygame.time.wait(6)
-                pygame.display.update()
-            self.enter = False
-
-        if self.ControlerMenu:
-            gauche.draw_text(self.__screen)
-            droite.draw_text(self.__screen)
-            tirer.draw_text(self.__screen)
-            sauter.draw_text(self.__screen)
-            special.draw_text(self.__screen)
-            jouabilite.draw_text(self.__screen)
-
-
-            construction.draw_text(self.__screen)
-            poser.draw_text(self.__screen)
-            supprimer.draw_text(self.__screen)
-            sauvegarder.draw_text(self.__screen)
-            vider.draw_text(self.__screen)
 
 
         pygame.display.update()
