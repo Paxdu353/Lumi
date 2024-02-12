@@ -25,7 +25,10 @@ ControlSettings = {
     "SAUTER": pygame.K_SPACE,
     "DROITE": pygame.K_d,
     "GAUCHE": pygame.K_q,
-    "ULTIME": pygame.K_s
+    "ULTIME": pygame.K_s,
+    "VIDER": pygame.K_x,
+    "SAUVEGARDER": pygame.K_j,
+    "CONSTRUCTEUR": pygame.K_k
 
 }
 

@@ -4,6 +4,7 @@ import pygame
 
 import Lumi.Class.AnimationClass as AC
 import Lumi.Class.BriqueClass as BC
+from Lumi.settings import *
 
 
 class Player(AC.AnimationSprite):
@@ -92,7 +93,7 @@ class Player(AC.AnimationSprite):
             self.movement_vector = 0
 
 
-        elif cle[pygame.K_d]:
+        elif cle[ControlSettings["DROITE"]]:
             self.x += 3
             self.hitbox.x_pos += 3
             if self.hitbox != None and self.hitbox.collide(briques):
@@ -112,7 +113,7 @@ class Player(AC.AnimationSprite):
                     self.movement_vector = 1
 
 
-        elif cle[pygame.K_q]:
+        elif cle[ControlSettings["GAUCHE"]]:
             self.x -= 3
             self.hitbox.x_pos -= 3
             if self.hitbox != None and self.hitbox.collide(briques):

@@ -53,27 +53,25 @@ class Main:
         controle = BUC.Button(825, 0, 'CONTROLE', (184, 7, 75), 75)
         video = BUC.Button(1275, 0, 'VIDEO', (184, 7, 75), 75)
 
-        jouabilite = BUC.Button(100, 200, 'JOUABILITE:', (184, 7, 75), 75)
-        droite = BUC.Button(200, 350, f'DROITE: {valeur_control("DROITE")}', (184, 7, 75), 50)
-        gauche = BUC.Button(200, 450, f'GAUCHE: {valeur_control("GAUCHE")}', (184, 7, 75), 50)
-        sauter = BUC.Button(200, 550, f'SAUTER: {valeur_control("SAUTER")}', (184, 7, 75), 50)
-        tirer = BUC.Button(200, 650, f'TIRER', (184, 7, 75), 50)
-        special = BUC.Button(200, 750, f'ULTIME: {valeur_control("ULTIME")}', (184, 7, 75), 50)
+        jouabilite = BUC.Button(250, 200, 'JOUABILITE:', (184, 7, 75), 100)
+        droite = BUC.Button(350, 350, f'DROITE: {valeur_control("DROITE")}', (184, 7, 75), 50)
+        gauche = BUC.Button(350, 450, f'GAUCHE: {valeur_control("GAUCHE")}', (184, 7, 75), 50)
+        sauter = BUC.Button(350, 550, f'SAUTER: {valeur_control("SAUTER")}', (184, 7, 75), 50)
+        special = BUC.Button(350, 650, f'ULTIME: {valeur_control("ULTIME")}', (184, 7, 75), 50)
 
-        construction = BUC.Button(600, 200, 'CONSTRUCTION:', (184, 7, 75), 75)
-        vider= BUC.Button(750, 350, 'VIDER', (184, 7, 75), 50)
-        poser = BUC.Button(750, 450, 'POSER', (184, 7, 75), 50)
-        supprimer = BUC.Button(750, 550, 'SUPPRIMER', (184, 7, 75), 50)
-        sauvegarder = BUC.Button(750, 650, 'SAUVEGARDER', (184, 7, 75), 50)
+        construction = BUC.Button(1000, 200, 'CONSTRUCTION:', (184, 7, 75), 100)
+        vider= BUC.Button(1150, 350, f'VIDER: {valeur_control("VIDER")}', (184, 7, 75), 50)
+        sauvegarder = BUC.Button(1150, 450, f'SAUVEGARDER: {valeur_control("SAUVEGARDER")}', (184, 7, 75), 50)
+        mod_contru = BUC.Button(1150, 550, f'CONSTRUCTEUR: {valeur_control("CONSTRUCTEUR")}', (184, 7, 75), 50)
 
-        controle_list = [droite, gauche, sauter, tirer, special, vider, poser, supprimer, sauvegarder]
+        controle_list = [droite, gauche, sauter, special, vider, sauvegarder, mod_contru]
 
 
 
 
 
         if self.sound.get_num_channels() == 0:
-            self.sound.set_volume(0.1)
+            self.sound.set_volume(0.3)
             self.sound.play()
 
 
@@ -89,41 +87,7 @@ class Main:
         controle.check_colision(x, y)
         video.check_colision(x, y)
 
-        self.__screen.blit(self.Menu, (0, 0))
 
-        if not self.SettingsMenu:
-            name.draw_text(self.__screen)
-            jouer.draw_text(self.__screen)
-            reglage.draw_text(self.__screen)
-            quitter.draw_text(self.__screen)
-
-        else:
-            audio.draw_text(self.__screen)
-            retour.draw_text(self.__screen)
-            controle.draw_text(self.__screen)
-            video.draw_text(self.__screen)
-
-        if self.enter:
-            for i in range(0, 255, 2):
-                rectsurf.fill((0, 0, 0, i))
-                self.__screen.blit(rectsurf, (0, 0))
-                pygame.time.wait(6)
-                pygame.display.update()
-            self.enter = False
-
-        if self.ControlerMenu:
-            gauche.draw_text(self.__screen)
-            droite.draw_text(self.__screen)
-            tirer.draw_text(self.__screen)
-            sauter.draw_text(self.__screen)
-            special.draw_text(self.__screen)
-            jouabilite.draw_text(self.__screen)
-
-            construction.draw_text(self.__screen)
-            poser.draw_text(self.__screen)
-            supprimer.draw_text(self.__screen)
-            sauvegarder.draw_text(self.__screen)
-            vider.draw_text(self.__screen)
 
 
 
@@ -158,18 +122,24 @@ class Main:
                             self.SettingsMenu = False
                             self.ControlerMenu = False
                         elif audio.rect.collidepoint(x, y):
-                            pass
+                            self.ControlerMenu = False
+                            self.AudioMenu = True
+                            self.VideoMenu = False
                         elif controle.rect.collidepoint(x, y):
                             self.ControlerMenu = True
+                            self.AudioMenu = False
+                            self.VideoMenu = False
                         elif video.rect.collidepoint(x, y):
-                            pass
+                            self.ControlerMenu = False
+                            self.AudioMenu = False
+                            self.VideoMenu = True
 
                         if self.ControlerMenu:
                             for elem in controle_list:
                                 if elem.rect.collidepoint(x, y):
-                                    elem.text = elem.text.split(":")[0] + ": "
+                                    elem.color = (255, 84, 150)
+                                    elem.draw_text(self.__screen)
                                     pygame.display.update()
-
                                     waiting_for_key = True
                                     while waiting_for_key:
                                         for event in pygame.event.get():
@@ -188,7 +158,39 @@ class Main:
                                                     waiting_for_key = False
                                                     break
 
+        self.__screen.blit(self.Menu, (0, 0))
 
+        if not self.SettingsMenu:
+            name.draw_text(self.__screen)
+            jouer.draw_text(self.__screen)
+            reglage.draw_text(self.__screen)
+            quitter.draw_text(self.__screen)
+
+        else:
+            audio.draw_text(self.__screen)
+            retour.draw_text(self.__screen)
+            controle.draw_text(self.__screen)
+            video.draw_text(self.__screen)
+
+        if self.enter:
+            for i in range(0, 255, 2):
+                rectsurf.fill((0, 0, 0, i))
+                self.__screen.blit(rectsurf, (0, 0))
+                pygame.time.wait(6)
+                pygame.display.update()
+            self.enter = False
+
+        if self.ControlerMenu:
+            gauche.draw_text(self.__screen)
+            droite.draw_text(self.__screen)
+            sauter.draw_text(self.__screen)
+            special.draw_text(self.__screen)
+            jouabilite.draw_text(self.__screen)
+
+            construction.draw_text(self.__screen)
+            sauvegarder.draw_text(self.__screen)
+            vider.draw_text(self.__screen)
+            mod_contru.draw_text(self.__screen)
 
 
 
@@ -203,10 +205,10 @@ class Main:
                 exit()
 
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == ControlSettings['SAUTER']:
                     self.__player.jump()
 
-                elif event.key == pygame.K_s:
+                elif event.key == ControlSettings['ULTIME']:
                     if len(self.ulti) == 0 and len(self.projectiles) == 0 and self.__player.ultime_attack > 0:
                         mouse_x, mouse_y = pygame.mouse.get_pos()
                         angle = self.__player.get_angle(self.__player.x, self.__player.y, mouse_x, mouse_y)
@@ -216,18 +218,18 @@ class Main:
                         for i in range(3):
                             self.ulti.append(PCP.Projectile(self.__player.x, self.__player.y, angle, 7 - i))
 
-                elif event.key == pygame.K_k:
+                elif event.key == ControlSettings['CONSTRUCTEUR']:
                     if self.DrawMode == True:
                         self.DrawMode = False
                     else:
                         self.DrawMode = True
 
-                elif event.key == pygame.K_j:
+                elif event.key == ControlSettings['SAUVEGARDER']:
                     with open('Level/briques_list.txt', 'w') as file:
                         file.write(str(self.map.briques))
 
 
-                elif event.key == pygame.K_x and self.DrawMode:
+                elif event.key == ControlSettings['VIDER'] and self.DrawMode:
                     self.map.briques = []
 
 
