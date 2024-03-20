@@ -11,15 +11,10 @@ class Map:
         self.active_briques = []
         self.background = BAC.Background(background_name)
         self.grid_offset_x = 0
-        self.tile_list = {
-            1: (255, 0, 0),
-            2: (255, 255, 0),
-            3: (255, 255, 255),
-            4: (0, 0, 255),
-            5: (178, 227, 157)
-        }
+        self.tile_list = {x: pygame.image.load(f"images/Tiles/Tile_{x}.png").convert_alpha() for x in range(1, 12)}
         self.spawn = False
         self.current_scroll = 1
+
 
 
         if len(self.briques) != 0:
@@ -27,16 +22,18 @@ class Map:
             load = self.briques
             self.briques = []
             liste = [load[i:i + len_rect] for i in range(0, len(load), len_rect)]
-            for brique in liste:
-                self.add_brique(brique[0], brique[1], brique[2], brique[3], brique[4])
+            for briques in liste:
+                for brique in briques:
+                    print(brique)
+                    self.add_brique(brique[0], brique[1], brique[2], brique[3], self.tile_list[brique[4]], self.current_scroll)
 
 
     def DrawMode(self, screen, size):
         self.TiledMap(screen, size)
         self.DrawModeText(screen)
 
-    def add_brique(self, x_pos, y_pos, width, height, color=(255, 255, 255)):
-        nouvelle_brique = BRC.Brique(x_pos, y_pos, width, height, self.screen, color)
+    def add_brique(self, x_pos, y_pos, width, height, img, index):
+        nouvelle_brique = BRC.Brique(x_pos, y_pos, width, height, self.screen, img, index)
         self.briques.append(nouvelle_brique)
 
     def update(self, player_velocity, player_movement_vector, bg_scroll):
@@ -91,7 +88,7 @@ class Map:
         x = (x - self.grid_offset_x) // 64
         y = y // 64
 
-        brique = BRC.Brique(x * 64 + self.grid_offset_x, y * 64, 64, 64, screen, self.tile_list[self.current_scroll])
+        brique = BRC.Brique(x * 64 + self.grid_offset_x, y * 64, 64, 64, screen, self.tile_list[self.current_scroll], self.current_scroll)
         if brique not in self.briques:
             self.briques.append(brique)
 
@@ -102,9 +99,6 @@ class Map:
         screen.blit(text, (10, 25))
 
     def DrawScrollText(self, screen):
-        scroll_text = f"COULEUR UTILISER"
-        font = pygame.font.SysFont(None, 24)
-        text = font.render(scroll_text, True, self.tile_list[self.current_scroll])
-        screen.blit(text, (10, 40))
+        screen.blit(pygame.image.load(f"images/Tiles/Tile_{self.current_scroll}.png"), (150, 25))
 
 

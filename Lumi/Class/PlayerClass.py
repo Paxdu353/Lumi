@@ -1,7 +1,5 @@
 import math
-
 import pygame
-
 import Lumi.Class.AnimationClass as AC
 import Lumi.Class.BriqueClass as BC
 from Lumi.settings import *
@@ -36,7 +34,7 @@ class Player(AC.AnimationSprite):
         self.bottom_collide = False
 
     def update_animation_state(self, screen):
-        self.hitbox = BC.Brique(self.x-50, self.y-95, (self.image.get_width()//2) - 30, (self.image.get_height()//2) + 50, screen)
+        self.hitbox = BC.Brique(self.x-50, self.y-95, (self.image.get_width()//2) - 30, (self.image.get_height()//2) + 50,screen , pygame.image.load("images/Tiles/Tile_2.png"), 1)
         if self.movement_vector != 0 and not self.is_attack:
             self.images_list = AC.animations['Player']['Walk']
 
@@ -135,6 +133,10 @@ class Player(AC.AnimationSprite):
 
         else:
             self.movement_vector = 0
+
+
+        global scroll
+        scroll = self.scroll
 
 
 

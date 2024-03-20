@@ -21,7 +21,7 @@ class Main:
         self.fps = fps
         self.speed_map = 3
         self.__screen = pygame.display.set_mode((self.width, self.height))
-        self.__player = PC.Player(self.width / 2, height - 118)
+        self.__player = PC.Player(100, height - 118)
         self.projectiles = []
         self.ulti = []
         self.items = []
