@@ -7,7 +7,7 @@ from Lumi.settings import *
 
 class Player(AC.AnimationSprite):
 
-    def __init__(self, x_pos, y_pos, main_attack=10, ultime_attack=4, width=32, height=32):
+    def __init__(self, x_pos = 100, y_pos = 962, main_attack=10, ultime_attack=4, width=32, height=32):
         super().__init__("Player", "Idle")
         self.x = x_pos
         self.y = y_pos
@@ -34,7 +34,7 @@ class Player(AC.AnimationSprite):
         self.bottom_collide = False
 
     def update_animation_state(self, screen):
-        self.hitbox = BC.Brique(self.x-50, self.y-95, (self.image.get_width()//2) - 30, (self.image.get_height()//2) + 50,screen , pygame.image.load("images/Tiles/Tile_2.png"), 1)
+        self.hitbox = BC.Brique(self.x-50, self.y-95, (self.image.get_width()//2) - 30, (self.image.get_height()//2) + 50,screen , pygame.image.load("images/Tiles/Tile_2.png"), 1, 0)
         if self.movement_vector != 0 and not self.is_attack:
             self.images_list = AC.animations['Player']['Walk']
 
@@ -134,16 +134,9 @@ class Player(AC.AnimationSprite):
         else:
             self.movement_vector = 0
 
-
-        global scroll
-        scroll = self.scroll
-
-
-
     def update(self, screen, briques):
         self.update_animation_state(screen)
         self.check_vertical_collision(briques)
-
 
     def draw_ammo(self, screen):
         ammo_text = f"Bullet: {self.main_attack}, Ultimate: {self.ultime_attack}"
@@ -189,3 +182,8 @@ class Player(AC.AnimationSprite):
 
     def get_angle(self, x1, y1, x2, y2):
         return math.atan2(y2 - y1, x2 - x1)
+
+
+    def get_scroll(self):
+        print(self.scroll)
+        return self.scroll

@@ -275,7 +275,9 @@ class Main:
         self.__player.move(cle, self.map.active_briques)
 
     def update_display(self):
+
         self.__player.update(self.__screen, self.map.active_briques)
+        self.map.scroll_player = self.__player.scroll
 
         for projectile in self.projectiles + self.ulti:
             projectile.move()

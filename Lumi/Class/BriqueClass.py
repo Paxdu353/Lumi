@@ -67,5 +67,5 @@ class Brique:
         return self.rect_info().top
 
     def __repr__(self):
-        return f"[{self.x_pos + self.scroll}, {self.y_pos}, {self.width}, {self.height}, {self.index}]"
+        return f"[{self.x_pos}, {self.y_pos}, {self.width}, {self.height}, {self.index}, {self.scroll}]"
 
