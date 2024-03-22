@@ -1,4 +1,5 @@
 import pygame
+import os
 
 
 class AnimationSprite(pygame.sprite.Sprite):
@@ -28,8 +29,14 @@ class AnimationSprite(pygame.sprite.Sprite):
 def load_animation(target, movement):
     images = []
     chemin = f"images/{target}/{movement}/"
+    nbr_fichier = 0
 
-    for img in range(1, 13):
+    for nom_fichier in os.listdir(chemin):
+        chemin_complet = os.path.join(chemin, nom_fichier)
+        if os.path.isfile(chemin_complet):
+            nbr_fichier += 1
+
+    for img in range(1, nbr_fichier):
         image = chemin + f"{movement}_{img}.png"
         images.append(pygame.transform.scale(pygame.image.load(image), (250, 200)))
 
@@ -41,5 +48,11 @@ animations = {
         'Idle': load_animation('Player', 'Idle'),
         'Walk': load_animation('Player', 'Walk'),
         'Attack': load_animation('Player', 'Attack')
+    },
+
+    'Herbe': {
+        'Move': load_animation('Herbe', 'Move')
     }
+
+
 }

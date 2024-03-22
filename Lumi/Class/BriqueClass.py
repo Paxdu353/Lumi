@@ -15,8 +15,9 @@ class Brique:
         self.index = index
         self.rect = self.rect_info()
         self.check_col = False
+        self.anim_herbe = None
         self.has_colision = colision
-        self.abs_x = x_pos + -scroll
+        self.abs_x = x_pos + (abs(scroll))
 
     def resize(self, width, height):
         self.height = height
@@ -37,9 +38,12 @@ class Brique:
     def hide(self):
         self.__is_visible = False
 
-    def draw(self, screen):
+    def draw(self, screen, herbe = None):
         if self.__is_visible and (self.x_pos > 0 - self.width) and self.y_pos <= 1920:
-            screen.blit(pygame.transform.scale(self.img, (64, 64)), self.rect_info())
+            if herbe == None:
+                screen.blit(pygame.transform.scale(self.img, (64, 64)), self.rect_info())
+            else:
+                screen.blit(pygame.transform.scale(herbe, (64, 64)), self.rect_info())
 
     def rect_info(self):
         return pygame.rect.Rect(self.x_pos, self.y_pos, self.width, self.height)
@@ -66,5 +70,5 @@ class Brique:
         return self.rect_info().top
 
     def __repr__(self):
-        return f"{self.abs_x}, {self.y_pos}, {self.width}, {self.height}, {self.index}, {abs(self.scroll)}"
+        return f"{self.abs_x}, {self.y_pos}, {self.width}, {self.height}, {self.index}"
 

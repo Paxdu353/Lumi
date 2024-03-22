@@ -20,9 +20,9 @@ class Main:
         self.height = height
         self.__name = name
         self.fps = fps
-        self.speed_map = 3
+        self.speed_map = 5
         self.__screen = pygame.display.set_mode((self.width, self.height))
-        self.__player = PC.Player(100, height - 118)
+        self.__player = PC.Player(100, 905)
         self.projectiles = []
         self.ulti = []
         self.items = []
@@ -200,6 +200,7 @@ class Main:
 
     def main_events(self):
         self.map.draw_bg(self.__player.scroll)
+        self.map.animate()
         self.__player.draw(self.__screen)
         self.map.draw_rect()
         for event in pygame.event.get():

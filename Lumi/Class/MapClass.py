@@ -3,13 +3,14 @@ import pickle
 
 import Lumi.Class.BackgroundClass as BAC
 import Lumi.Class.BriqueClass as BRC
-import Lumi.Class.PlayerClass as PC
+import Lumi.Class.AnimationClass as AC
 
 
 
 
-class Map():
+class Map(AC.AnimationSprite):
     def __init__(self, screen, background_name):
+        super().__init__("Herbe", "Move")
         self.screen = screen
         self.briques = []
         self.liste_briques = []
@@ -18,12 +19,10 @@ class Map():
                 self.liste_briques.append([int(c) for c in line.split(",")])
 
 
-
-
         self.active_briques = []
         self.background = BAC.Background(background_name)
         self.grid_offset_x = 0
-        self.tile_list = {x: pygame.image.load(f"images/Tiles/Tile_{x}.png").convert_alpha() for x in range(1, 16)}
+        self.tile_list = {x: pygame.image.load(f"images/Tiles/Tile_{x}.png").convert_alpha() for x in range(1, 17)}
         self.spawn = False
         self.current_scroll = 1
         self.scroll_player = 0
@@ -31,7 +30,7 @@ class Map():
 
 
         for brique in self.liste_briques:
-            self.add_brique(brique[0], brique[1], brique[2], brique[3], self.tile_list[brique[4]], brique[4], brique[5])
+            self.add_brique(brique[0], brique[1], brique[2], brique[3], self.tile_list[brique[4]], brique[4], 0)
         print(self.briques)
 
 
@@ -41,6 +40,11 @@ class Map():
 
     def add_brique(self, x_pos, y_pos, width, height, img, index, scroll):
         nouvelle_brique = BRC.Brique(x_pos, y_pos, width, height, self.screen, img, index, scroll)
+        if nouvelle_brique.index == 12:
+            nouvelle_brique.anim_herbe = True
+            self.images_list = AC.animations['Herbe']['Move']
+            nouvelle_brique.has_colision = False
+
         self.briques.append(nouvelle_brique)
 
     def update(self, player_velocity, player_movement_vector, bg_scroll):
@@ -73,6 +77,9 @@ class Map():
             if brique.collidepoint(x, y):
                 self.briques.remove(brique)
 
+    def update_anim(self):
+        self.animate()
+
     def RemoveAllRect(self):
         self.briques = []
 
@@ -81,7 +88,10 @@ class Map():
 
     def draw_rect(self):
         for brique in self.briques:
-            brique.draw(self.screen)
+            if brique.anim_herbe == None:
+                brique.draw(self.screen)
+            else:
+                brique.draw(self.screen, self.image)
 
     def get_check_collision(self, x_pos, y_pos):
         liste = []
@@ -100,8 +110,10 @@ class Map():
 
         brique = BRC.Brique(x * 64 + self.grid_offset_x, y * 64, 64, 64, screen, self.tile_list[self.current_scroll], self.current_scroll, self.grid_offset_x)
         if brique not in self.briques:
-            if brique.img == self.tile_list[12]:
+            if brique.index == 12:
                 brique.has_colision = False
+                brique.anim_herbe = True
+                self.images_list = AC.animations['Herbe']['Move']
             self.briques.append(brique)
 
     def DrawModeText(self, screen):

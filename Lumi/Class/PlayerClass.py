@@ -29,9 +29,9 @@ class Player(AC.AnimationSprite):
         self.jump_speed = -12
         self.can_move = True
         self.__is_jumping = False
-        self.images_list = AC.animations['Player']['Attack']
         self.hitbox = None
         self.bottom_collide = False
+
 
     def update_animation_state(self, screen):
         self.hitbox = BC.Brique(self.x-50, self.y-95, (self.image.get_width()//2) - 30, (self.image.get_height()//2) + 50,screen , pygame.image.load("images/Tiles/Tile_2.png"), 1, 0)
@@ -108,7 +108,7 @@ class Player(AC.AnimationSprite):
                     self.x += self.velocity
                 else:
                     self.look = 'RIGHT'
-                    self.scroll += self.velocity
+                    self.scroll += 1
                     self.movement_vector = 1
 
 
@@ -129,7 +129,7 @@ class Player(AC.AnimationSprite):
 
                 else:
                     self.look = 'LEFT'
-                    self.scroll -= self.velocity
+                    self.scroll -= 1
                     self.movement_vector = -1
 
         else:
