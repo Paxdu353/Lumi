@@ -1,4 +1,5 @@
 import pygame
+import pickle
 
 import Lumi.Class.MapClass as MC
 import Lumi.Class.PlayerClass as PC
@@ -198,7 +199,9 @@ class Main:
 
 
     def main_events(self):
-        self.map.draw(self.__player.scroll)
+        self.map.draw_bg(self.__player.scroll)
+        self.__player.draw(self.__screen)
+        self.map.draw_rect()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -225,8 +228,9 @@ class Main:
                         self.DrawMode = True
 
                 elif event.key == ControlSettings['SAUVEGARDER']:
-                    with open('Level/briques_list.txt', 'w') as file:
-                        file.write(str(self.map.briques))
+                    with open("Level/briques_list.txt", "w") as f1:
+                        for brique in self.map.briques:
+                            f1.write(str(brique) + "\n")
 
 
                 elif event.key == ControlSettings['VIDER'] and self.DrawMode:
@@ -314,9 +318,13 @@ class Main:
 
         self.map.update(self.__player.movement_vector, self.speed_map, self.__player.scroll)
         #pygame.draw.rect(self.__screen, (255, 255, 255), self.__player.hitbox)
-        self.__player.draw(self.__screen)
+
+
+
         for item in self.items:
             item.draw(self.__screen)
+
+
         self.__player.draw_ammo(self.__screen)
         self.__player.debug_mode(self.__screen)
 

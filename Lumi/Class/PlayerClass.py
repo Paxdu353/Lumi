@@ -19,14 +19,14 @@ class Player(AC.AnimationSprite):
         self.is_attack = False
         self.original_img = self.image
         self.look = 'RIGHT'
-        self.velocity = 0
+        self.velocity = 5
         self.movement_vector = 0
         self.vec_sup = 0
         self.vec_last = 0
         self.velocity_y = 0
         self.gravity = 0.5
         self.jumps_left = 2
-        self.jump_speed = -10
+        self.jump_speed = -12
         self.can_move = True
         self.__is_jumping = False
         self.images_list = AC.animations['Player']['Attack']
@@ -62,22 +62,23 @@ class Player(AC.AnimationSprite):
     def check_vertical_collision(self, briques):
         self.apply_gravity()
         for brique in briques:
-            if brique.y_pos < self.hitbox.y_pos:
-                if self.hitbox != None and self.hitbox.colliderect(brique):
-                    self.velocity_y = 0
-                    self.y = brique.bottom() + (self.image.get_height() // 2)
-                    break
+            if brique.has_colision:
+                if brique.y_pos < self.hitbox.y_pos:
+                    if self.hitbox != None and self.hitbox.colliderect(brique):
+                        self.velocity_y = 0
+                        self.y = brique.bottom() + (self.image.get_height() // 2)
+                        break
 
-            elif brique.y_pos > self.hitbox.y_pos and self.velocity_y > 0:
-                self.hitbox.y_pos += 1
-                if self.hitbox != None and self.hitbox.colliderect(brique):
-                    self.velocity_y = 0
-                    self.y = brique.top() - ((self.image.get_height() // 2) - 45)
-                    self.jumps_left = 2
+                elif brique.y_pos > self.hitbox.y_pos and self.velocity_y > 0:
+                    self.hitbox.y_pos += 1
+                    if self.hitbox != None and self.hitbox.colliderect(brique):
+                        self.velocity_y = 0
+                        self.y = brique.top() - ((self.image.get_height() // 2) - 45)
+                        self.jumps_left = 2
+                        self.hitbox.y_pos -= 1
+                        break
+
                     self.hitbox.y_pos -= 1
-                    break
-
-                self.hitbox.y_pos -= 1
 
 
     def jump(self):
@@ -92,43 +93,43 @@ class Player(AC.AnimationSprite):
 
 
         elif cle[ControlSettings["DROITE"]]:
-            self.x += 3
-            self.hitbox.x_pos += 3
+            self.x += self.velocity
+            self.hitbox.x_pos += self.velocity
             if self.hitbox != None and self.hitbox.collide(briques):
-                self.x -= 3
-                self.hitbox.x_pos -= 3
+                self.x -= self.velocity
+                self.hitbox.x_pos -= self.velocity
                 self.movement_vector = 0
             else:
-                self.x -= 3
-                self.hitbox.x_pos -= 3
+                self.x -= self.velocity
+                self.hitbox.x_pos -= self.velocity
                 if self.x < 960 or self.scroll >= 3000:
                     self.movement_vector = 1
                     self.look = 'RIGHT'
-                    self.x += 3
+                    self.x += self.velocity
                 else:
                     self.look = 'RIGHT'
-                    self.scroll += 1
+                    self.scroll += self.velocity
                     self.movement_vector = 1
 
 
         elif cle[ControlSettings["GAUCHE"]]:
-            self.x -= 3
-            self.hitbox.x_pos -= 3
+            self.x -= self.velocity
+            self.hitbox.x_pos -= self.velocity
             if self.hitbox != None and self.hitbox.collide(briques):
-                self.x += 3
-                self.hitbox.x_pos += 3
+                self.x += self.velocity
+                self.hitbox.x_pos += self.velocity
                 self.movement_vector = 0
             else:
-                self.x += 3
-                self.hitbox.x_pos += 3
+                self.x += self.velocity
+                self.hitbox.x_pos += self.velocity
                 if self.x > 960 or self.scroll <= 0:
                     self.movement_vector = -1
                     self.look = 'LEFT'
-                    self.x -= 3
+                    self.x -= self.velocity
 
                 else:
                     self.look = 'LEFT'
-                    self.scroll -= 1
+                    self.scroll -= self.velocity
                     self.movement_vector = -1
 
         else:

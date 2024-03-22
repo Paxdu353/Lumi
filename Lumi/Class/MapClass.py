@@ -1,4 +1,5 @@
 import pygame
+import pickle
 
 import Lumi.Class.BackgroundClass as BAC
 import Lumi.Class.BriqueClass as BRC
@@ -10,25 +11,28 @@ import Lumi.Class.PlayerClass as PC
 class Map():
     def __init__(self, screen, background_name):
         self.screen = screen
-        self.briques = [[1728, 384, 64, 64, 1, 0]]
+        self.briques = []
+        self.liste_briques = []
+        with open("Level/briques_list.txt", "r") as f1:
+            for line in f1.readlines():
+                self.liste_briques.append([int(c) for c in line.split(",")])
+
+
+
+
         self.active_briques = []
         self.background = BAC.Background(background_name)
         self.grid_offset_x = 0
-        self.tile_list = {x: pygame.image.load(f"images/Tiles/Tile_{x}.png").convert_alpha() for x in range(1, 12)}
+        self.tile_list = {x: pygame.image.load(f"images/Tiles/Tile_{x}.png").convert_alpha() for x in range(1, 16)}
         self.spawn = False
         self.current_scroll = 1
         self.scroll_player = 0
 
 
 
-        if len(self.briques) != 0:
-            len_rect = 6
-            load = self.briques
-            self.briques = []
-            liste = [load[i:i + len_rect] for i in range(0, len(load), len_rect)]
-            for briques in liste:
-                for brique in briques:
-                    self.add_brique(brique[0], brique[1], brique[2], brique[3], self.tile_list[brique[4]], self.current_scroll, brique[5])
+        for brique in self.liste_briques:
+            self.add_brique(brique[0], brique[1], brique[2], brique[3], self.tile_list[brique[4]], brique[4], brique[5])
+        print(self.briques)
 
 
     def DrawMode(self, screen, size):
@@ -40,6 +44,7 @@ class Map():
         self.briques.append(nouvelle_brique)
 
     def update(self, player_velocity, player_movement_vector, bg_scroll):
+
         if bg_scroll > 0:
             self.grid_offset_x += player_velocity * -player_movement_vector
 
@@ -71,19 +76,20 @@ class Map():
     def RemoveAllRect(self):
         self.briques = []
 
-
-
-    def draw(self, scroll):
+    def draw_bg(self, scroll):
         self.background.draw_bg(self.screen, scroll)
+
+    def draw_rect(self):
         for brique in self.briques:
             brique.draw(self.screen)
 
     def get_check_collision(self, x_pos, y_pos):
         liste = []
         for brique in self.briques:
-            if x_pos - 215 <= brique.x_pos <= x_pos + 150 and y_pos - 215 <= brique.y_pos <= y_pos + 150:
-                liste.append(brique)
-                brique.check_col = True
+            if brique.has_colision:
+                if x_pos - 215 <= brique.x_pos <= x_pos + 150 and y_pos - 215 <= brique.y_pos <= y_pos + 150:
+                    liste.append(brique)
+                    brique.check_col = True
         self.active_briques = liste
 
     def DrawRect(self, screen):
@@ -94,13 +100,18 @@ class Map():
 
         brique = BRC.Brique(x * 64 + self.grid_offset_x, y * 64, 64, 64, screen, self.tile_list[self.current_scroll], self.current_scroll, self.grid_offset_x)
         if brique not in self.briques:
+            if brique.img == self.tile_list[12]:
+                brique.has_colision = False
             self.briques.append(brique)
 
     def DrawModeText(self, screen):
         mode_text = f'Mode draw activé'
+        offset_x = f"{self.current_scroll}"
         font = pygame.font.SysFont(None, 24)
         text = font.render(mode_text, True, (255, 255, 255))
+        text2 = font.render(offset_x, True, (255, 255, 255))
         screen.blit(text, (10, 25))
+        screen.blit(text2, (10, 180))
 
     def DrawScrollText(self, screen):
         screen.blit(pygame.image.load(f"images/Tiles/Tile_{self.current_scroll}.png"), (150, 25))

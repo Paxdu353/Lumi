@@ -3,7 +3,7 @@ from Lumi.Class.PlayerClass import *
 
 
 class Brique:
-    def __init__(self, x_pos, y_pos, width, height, screen, img, index, scroll):
+    def __init__(self, x_pos, y_pos, width, height, screen, img, index, scroll, colision = True):
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.width = width
@@ -15,6 +15,8 @@ class Brique:
         self.index = index
         self.rect = self.rect_info()
         self.check_col = False
+        self.has_colision = colision
+        self.abs_x = x_pos + -scroll
 
     def resize(self, width, height):
         self.height = height
@@ -38,9 +40,6 @@ class Brique:
     def draw(self, screen):
         if self.__is_visible and (self.x_pos > 0 - self.width) and self.y_pos <= 1920:
             screen.blit(pygame.transform.scale(self.img, (64, 64)), self.rect_info())
-
-
-
 
     def rect_info(self):
         return pygame.rect.Rect(self.x_pos, self.y_pos, self.width, self.height)
@@ -67,5 +66,5 @@ class Brique:
         return self.rect_info().top
 
     def __repr__(self):
-        return f"[{self.x_pos}, {self.y_pos}, {self.width}, {self.height}, {self.index}, {self.scroll}]"
+        return f"{self.abs_x}, {self.y_pos}, {self.width}, {self.height}, {self.index}, {abs(self.scroll)}"
 
