@@ -1,11 +1,10 @@
 import pygame
-import pickle
 
 import Lumi.Class.MapClass as MC
 import Lumi.Class.PlayerClass as PC
 import Lumi.Class.ProjectileClass as PCP
-import Lumi.Class.BriqueClass as BC
 import Lumi.Class.ButtonClass as BUC
+import Lumi.Class.EnemiesClass as EC
 from Lumi.settings import *
 
 pygame.init()
@@ -23,6 +22,7 @@ class Main:
         self.speed_map = 5
         self.__screen = pygame.display.set_mode((self.width, self.height))
         self.__player = PC.Player(100, 905)
+        self.__enemy = EC.Enemy()
         self.projectiles = []
         self.ulti = []
         self.items = []
@@ -31,6 +31,7 @@ class Main:
         self.SettingsMenu = False
         self.AudioMenu = False
         self.VideoMenu = False
+        self.SkinMenu = False
         self.ControlerMenu = False
         self.enter = False
         self.map = MC.Map(self.__screen, 'Background_1')
@@ -53,6 +54,7 @@ class Main:
         audio = BUC.Button(500, 0, 'AUDIO', (184, 7, 75), 75)
         controle = BUC.Button(825, 0, 'CONTROLE', (184, 7, 75), 75)
         video = BUC.Button(1275, 0, 'VIDEO', (184, 7, 75), 75)
+        skin = BUC.Button(1650, 0, 'SKIN', (184, 7, 75), 75)
 
         jouabilite = BUC.Button(250, 200, 'JOUABILITE:', (184, 7, 75), 100)
         droite = BUC.Button(350, 350, f'DROITE: {valeur_control("DROITE")}', (184, 7, 75), 50)
@@ -64,8 +66,9 @@ class Main:
         vider= BUC.Button(1150, 350, f'VIDER: {valeur_control("VIDER")}', (184, 7, 75), 50)
         sauvegarder = BUC.Button(1150, 450, f'SAUVEGARDER: {valeur_control("SAUVEGARDER")}', (184, 7, 75), 50)
         mod_contru = BUC.Button(1150, 550, f'CONSTRUCTEUR: {valeur_control("CONSTRUCTEUR")}', (184, 7, 75), 50)
+        colision = BUC.Button(1150, 650, f'COLISION: {valeur_control("COLISION")}', (184, 7, 75), 50)
 
-        controle_list = [droite, gauche, sauter, special, vider, sauvegarder, mod_contru]
+        controle_list = [droite, gauche, sauter, special, vider, sauvegarder, mod_contru, colision]
 
 
 
@@ -87,7 +90,7 @@ class Main:
         audio.check_colision(x, y)
         controle.check_colision(x, y)
         video.check_colision(x, y)
-
+        skin.check_colision(x, y)
 
 
 
@@ -122,18 +125,28 @@ class Main:
                         if retour.rect.collidepoint(x, y):
                             self.SettingsMenu = False
                             self.ControlerMenu = False
+                            self.AudioMenu = False
+                            self.SkinMenu = False
                         elif audio.rect.collidepoint(x, y):
                             self.ControlerMenu = False
                             self.AudioMenu = True
+                            self.SkinMenu = False
                             self.VideoMenu = False
                         elif controle.rect.collidepoint(x, y):
                             self.ControlerMenu = True
                             self.AudioMenu = False
+                            self.SkinMenu = False
                             self.VideoMenu = False
                         elif video.rect.collidepoint(x, y):
                             self.ControlerMenu = False
                             self.AudioMenu = False
+                            self.SkinMenu = False
                             self.VideoMenu = True
+                        elif skin.rect.collidepoint(x, y):
+                            self.ControlerMenu = False
+                            self.AudioMenu = False
+                            self.VideoMenu = False
+                            self.SkinMenu = True
 
                         if self.ControlerMenu:
                             for elem in controle_list:
@@ -172,6 +185,7 @@ class Main:
             retour.draw_text(self.__screen)
             controle.draw_text(self.__screen)
             video.draw_text(self.__screen)
+            skin.draw_text(self.__screen)
 
         if self.enter:
             for i in range(0, 255, 2):
@@ -192,6 +206,8 @@ class Main:
             sauvegarder.draw_text(self.__screen)
             vider.draw_text(self.__screen)
             mod_contru.draw_text(self.__screen)
+            colision.draw_text(self.__screen)
+
 
 
 
@@ -200,8 +216,8 @@ class Main:
 
     def main_events(self):
         self.map.draw_bg(self.__player.scroll)
-        self.map.animate()
         self.__player.draw(self.__screen)
+        self.__enemy.draw(self.__screen)
         self.map.draw_rect()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -213,7 +229,7 @@ class Main:
                     self.__player.jump()
 
                 elif event.key == ControlSettings['ULTIME']:
-                    if len(self.ulti) == 0 and len(self.projectiles) == 0 and self.__player.ultime_attack > 0:
+                    if self.__player.ultime_attack > 0:
                         mouse_x, mouse_y = pygame.mouse.get_pos()
                         angle = self.__player.get_angle(self.__player.x, self.__player.y, mouse_x, mouse_y)
                         self.__player.ultime_attack -= 1
@@ -227,6 +243,12 @@ class Main:
                         self.DrawMode = False
                     else:
                         self.DrawMode = True
+
+                elif event.key == ControlSettings['COLISION']:
+                    if self.map.colision == True:
+                        self.map.colision = False
+                    else:
+                        self.map.colision = True
 
                 elif event.key == ControlSettings['SAUVEGARDER']:
                     with open("Level/briques_list.txt", "w") as f1:
@@ -248,7 +270,7 @@ class Main:
                     if self.DrawMode:
                         self.map.DrawRect(self.__screen)
 
-                    elif len(self.projectiles) == 0 and len(self.ulti) == 0 and self.__player.main_attack > 0:
+                    elif self.__player.main_attack > 0:
                         mouse_x, mouse_y = pygame.mouse.get_pos()
                         angle = self.__player.get_angle(self.__player.x, self.__player.y, mouse_x, mouse_y)
                         self.projectiles.append(PCP.Projectile(self.__player.x, self.__player.y, angle))
@@ -282,7 +304,10 @@ class Main:
     def update_display(self):
 
         self.__player.update(self.__screen, self.map.active_briques)
-        self.map.scroll_player = self.__player.scroll
+        self.__enemy.update(self.__screen, self.__player, self.projectiles, self.__player.x, self.__player.y)
+        self.__enemy.scroll_x = self.__player.scroll
+        self.__enemy.vector_player = self.__player.movement_vector
+
 
         for projectile in self.projectiles + self.ulti:
             projectile.move()

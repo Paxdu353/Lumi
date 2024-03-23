@@ -1,7 +1,4 @@
 import pygame
-from Lumi.Class.PlayerClass import *
-
-
 class Brique:
     def __init__(self, x_pos, y_pos, width, height, screen, img, index, scroll, colision = True):
         self.x_pos = x_pos
@@ -15,7 +12,6 @@ class Brique:
         self.index = index
         self.rect = self.rect_info()
         self.check_col = False
-        self.anim_herbe = None
         self.has_colision = colision
         self.abs_x = x_pos + (abs(scroll))
 
@@ -38,12 +34,9 @@ class Brique:
     def hide(self):
         self.__is_visible = False
 
-    def draw(self, screen, herbe = None):
+    def draw(self, screen):
         if self.__is_visible and (self.x_pos > 0 - self.width) and self.y_pos <= 1920:
-            if herbe == None:
-                screen.blit(pygame.transform.scale(self.img, (64, 64)), self.rect_info())
-            else:
-                screen.blit(pygame.transform.scale(herbe, (64, 64)), self.rect_info())
+            screen.blit(pygame.transform.scale(self.img, (64, 64)), self.rect_info())
 
     def rect_info(self):
         return pygame.rect.Rect(self.x_pos, self.y_pos, self.width, self.height)
@@ -70,5 +63,5 @@ class Brique:
         return self.rect_info().top
 
     def __repr__(self):
-        return f"{self.abs_x}, {self.y_pos}, {self.width}, {self.height}, {self.index}"
+        return f"{self.abs_x}, {self.y_pos}, {self.width}, {self.height}, {self.index}, {int(self.has_colision)}"
 

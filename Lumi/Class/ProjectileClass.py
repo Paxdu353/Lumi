@@ -27,12 +27,12 @@ class Projectile:
         self.image = pygame.transform.rotate(self.original_image, self.rotation_angle)
 
     def update(self, screen):
-        self.hitbox = BC.Brique(self.x - (self.image.get_width() // 2) + 5, self.y - (self.image.get_height() // 2) + 10, self.image.get_width() - 10, self.image.get_height() - 10, screen, pygame.image.load("images/Tiles/Tile_2.png"), 0, 0)
+        self.hitbox = BC.Brique(self.x - (self.image.get_width() // 2) + 5, self.y - (self.image.get_height() // 2) + 10, self.image.get_width() - 15, self.image.get_height() - 15, screen, pygame.image.load("images/Tiles/Tile_2.png"), 0, 0)
 
 
     def DrawMainAttack(self, screen):
         rect = self.image.get_rect()
-        # pygame.draw.rect(screen, (255, 255, 255), self.hitbox)
+        #pygame.draw.rect(screen, (255, 255, 255), self.hitbox)
         rect.center = (self.x, self.y)
         screen.blit(self.image, rect)
 

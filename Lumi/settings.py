@@ -28,7 +28,8 @@ ControlSettings = {
     "ULTIME": pygame.K_s,
     "VIDER": pygame.K_x,
     "SAUVEGARDER": pygame.K_j,
-    "CONSTRUCTEUR": pygame.K_k
+    "CONSTRUCTEUR": pygame.K_k,
+    "COLISION": pygame.K_c
 
 }
 

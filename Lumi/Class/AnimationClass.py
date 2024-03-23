@@ -50,9 +50,10 @@ animations = {
         'Attack': load_animation('Player', 'Attack')
     },
 
-    'Herbe': {
-        'Move': load_animation('Herbe', 'Move')
+    'Enemy': {
+        'Idle': load_animation('Enemy', 'Idle'),
+        'Walk': load_animation('Enemy', 'Walk'),
+        'Attack': load_animation('Enemy', 'Attack')
     }
-
 
 }
