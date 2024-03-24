@@ -8,7 +8,7 @@ class Projectile:
     def __init__(self, x, y, angle, speed=7, image_path='images/Player/Attack.png'):
         self.x = x
         self.y = y
-        self.damage = 10
+        self.damage = 2
         self.angle = angle
         self.speed = speed
         self.rotation_angle = 0

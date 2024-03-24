@@ -47,13 +47,14 @@ animations = {
     'Player': {
         'Idle': load_animation('Player', 'Idle'),
         'Walk': load_animation('Player', 'Walk'),
-        'Attack': load_animation('Player', 'Attack')
+        'Attack': load_animation('Player', 'Attack'),
     },
 
     'Enemy': {
         'Idle': load_animation('Enemy', 'Idle'),
         'Walk': load_animation('Enemy', 'Walk'),
-        'Attack': load_animation('Enemy', 'Attack')
+        'Attack': load_animation('Enemy', 'Attack'),
+        'Dying': load_animation('Enemy', 'Dying'),
     }
 
 }

@@ -21,7 +21,7 @@ class Map():
         self.active_briques = []
         self.background = BAC.Background(background_name)
         self.grid_offset_x = 0
-        self.tile_list = {x: pygame.image.load(f"images/Tiles/Tile_{x}.png").convert_alpha() for x in range(1, 35)}
+        self.tile_list = {x: pygame.image.load(f"images/Tiles/Tile_{x}.png").convert_alpha() for x in range(1, 37)}
         self.spawn = False
         self.current_scroll = 1
         self.scroll_player = 0

@@ -19,6 +19,7 @@ class Player(AC.AnimationSprite):
         self.is_attack = False
         self.original_img = self.image
         self.look = 'RIGHT'
+        self.hp = 6
         self.velocity = 5
         self.movement_vector = 0
         self.vec_sup = 0
@@ -80,6 +81,13 @@ class Player(AC.AnimationSprite):
 
                     self.hitbox.y_pos -= 1
 
+    def check_colision(self, hit2):
+        if self.hitbox.colliderect(hit2.hitbox):
+            self.hp -= hit2.damage
+            return True
+        else:
+            return False
+
 
     def jump(self):
         if self.jumps_left > 0:
@@ -92,7 +100,7 @@ class Player(AC.AnimationSprite):
             self.movement_vector = 0
 
 
-        elif cle[ControlSettings["DROITE"]]:
+        elif cle[ControlSettings["DROITE"]] and self.hitbox != None:
             self.x += self.velocity
             self.hitbox.x_pos += self.velocity
             if self.hitbox != None and self.hitbox.collide(briques):
@@ -112,7 +120,7 @@ class Player(AC.AnimationSprite):
                     self.movement_vector = 1
 
 
-        elif cle[ControlSettings["GAUCHE"]]:
+        elif cle[ControlSettings["GAUCHE"]] and self.hitbox != None:
             self.x -= self.velocity
             self.hitbox.x_pos -= self.velocity
             if self.hitbox != None and self.hitbox.collide(briques):

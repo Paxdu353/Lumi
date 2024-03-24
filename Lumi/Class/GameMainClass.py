@@ -11,6 +11,8 @@ pygame.init()
 
 
 
+
+
 class Main:
 
     def __init__(self, width=1920, height=1080, name="Lumi", fps=60):
@@ -24,6 +26,7 @@ class Main:
         self.__player = PC.Player(100, 905)
         self.__enemy = EC.Enemy()
         self.projectiles = []
+        self.projectiles_enemy = []
         self.ulti = []
         self.items = []
         self.DrawMode = False
@@ -304,21 +307,37 @@ class Main:
     def update_display(self):
 
         self.__player.update(self.__screen, self.map.active_briques)
-        self.__enemy.update(self.__screen, self.__player, self.projectiles, self.__player.x, self.__player.y)
+        self.__enemy.update(self.__screen, self.__player, self.projectiles_enemy, self.__player.x, self.__player.y - 50)
         self.__enemy.scroll_x = self.__player.scroll
         self.__enemy.vector_player = self.__player.movement_vector
 
-
-        for projectile in self.projectiles + self.ulti:
+        for projectile in self.projectiles + self.ulti + self.projectiles_enemy:
             projectile.move()
             projectile.update(self.__screen)
             projectile.DrawMainAttack(self.__screen)
             self.map.get_check_collision(projectile.x, projectile.y)
+            if self.__enemy.check_colision(projectile):
+                if projectile in self.projectiles:
+                    self.projectiles.remove(projectile)
+                elif projectile in self.ulti:
+                    self.ulti.remove(projectile)
+                else:
+                    pass
+
+            if self.__player.check_colision(projectile):
+                if projectile in self.projectiles_enemy:
+                    self.projectiles_enemy.remove(projectile)
+
+
             if projectile.x < 0 or projectile.x > self.width or projectile.y < 0 or projectile.y > self.height:
                 if projectile in self.projectiles:
                     self.projectiles.remove(projectile)
-                else:
+
+                elif projectile in self.ulti:
                     self.ulti.remove(projectile)
+
+                else:
+                    self.projectiles_enemy.remove(projectile)
 
             else:
                 for brique in self.map.active_briques:
@@ -326,8 +345,11 @@ class Main:
                         if projectile in self.projectiles:
                             self.projectiles.remove(projectile)
                             break
-                        else:
+                        elif projectile in self.ulti:
                             self.ulti.remove(projectile)
+                            break
+                        else:
+                            self.projectiles_enemy.remove(projectile)
                             break
 
 
