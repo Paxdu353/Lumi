@@ -1,11 +1,11 @@
 import pygame
 
-import Lumi.Class.MapClass as MC
-import Lumi.Class.PlayerClass as PC
-import Lumi.Class.ProjectileClass as PCP
-import Lumi.Class.ButtonClass as BUC
-import Lumi.Class.EnemiesClass as EC
-from Lumi.settings import *
+import Class.MapClass as MC
+import Class.PlayerClass as PC
+import Class.ProjectileClass as PCP
+import Class.ButtonClass as BUC
+import Class.EnemiesClass as EC
+from settings import *
 
 pygame.init()
 
