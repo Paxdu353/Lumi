@@ -1,4 +1,3 @@
-import Lumi.Class.BriqueClass as BC
 import pygame
 class Button:
 

@@ -1,9 +1,9 @@
 import math
 import pygame
-import Lumi.Class.AnimationClass as AC
-import Lumi.Class.BriqueClass as BC
-import Lumi.Class.ProjectileClass as PC
-from Lumi.settings import *
+import Class.AnimationClass as AC
+import Class.BriqueClass as BC
+import Class.ProjectileClass as PC
+from settings import *
 
 
 class Enemy(AC.AnimationSprite):

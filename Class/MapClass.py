@@ -1,9 +1,8 @@
 import pygame
-import pickle
 
-import Lumi.Class.BackgroundClass as BAC
-import Lumi.Class.BriqueClass as BRC
-import Lumi.Class.AnimationClass as AC
+import Class.BackgroundClass as BAC
+import Class.BriqueClass as BRC
+import Class.AnimationClass as AC
 
 
 

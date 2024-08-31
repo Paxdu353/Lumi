@@ -1,8 +1,8 @@
 import math
 import pygame
-import Lumi.Class.AnimationClass as AC
-import Lumi.Class.BriqueClass as BC
-from Lumi.settings import *
+import Class.AnimationClass as AC
+import Class.BriqueClass as BC
+from settings import *
 
 
 class Player(AC.AnimationSprite):

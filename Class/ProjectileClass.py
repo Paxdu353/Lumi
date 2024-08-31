@@ -2,7 +2,7 @@
 import pygame
 import math
 
-import Lumi.Class.BriqueClass as BC
+import Class.BriqueClass as BC
 
 class Projectile:
     def __init__(self, x, y, angle, speed=7, image_path='images/Player/Attack.png'):
